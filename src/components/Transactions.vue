@@ -6,63 +6,9 @@
           <img src="/images/logo.png" class="logo">
           <span class="title">BaiST Blockchain Explorer</span>
         </el-col>
-        <router-link target="_blank" to="/txs">ss</router-link>  
         <el-col class="search">
           <el-input maxlength="64" placeholder="Please input block or tx hash" prefix-icon="el-icon-search" v-model="keyword"></el-input>
         </el-col>
-      </el-row>
-      <el-row class="total">
-        <el-col class="container">
-          <el-row class="container-inner">
-            <el-col class="block">
-              <div class="container">
-                <div class="title">BLOCK HEIGHT</div>
-                <div class="value">{{thousands("" + block.block_height)}}</div>
-              </div>
-            </el-col>
-            <el-col class="block">
-              <div class="container">
-                <div class="title">AVERAGE BLOCK TIME</div>
-                <div class="value">{{block.block_time}} Seconds</div>
-              </div>
-            </el-col>
-            <el-col class="block">
-              <div class="container">
-                <div class="title">TOTAL TRANSACTIONS</div>
-                <div class="value">{{thousands("" + block.total_transactions)}}</div>
-              </div>
-            </el-col>
-            <el-col class="block">
-              <div class="container">
-                <div class="title">TOTAL DIFFICULTY</div>
-                <div class="value">{{thousands("" + hexToNumberString(block.total_difficulty))}}</div>
-              </div>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row class="blocks">
-        <el-row class="head">
-          <el-col class="title"><h2>Blocks</h2></el-col>
-          <el-col class="buttons"><el-button type="primary" round @click="getBlock()">&nbsp;&nbsp;Refresh&nbsp;&nbsp;</el-button><el-button type="primary" round @click="getBlock()">View Blocks</el-button></el-col>
-        </el-row>
-        <el-row class="block">
-          <el-col v-for="item in block.blocks" :key="item.id" class="container">
-            <div class="content">
-              <a class="number" href="">#{{thousands("" + item.id)}}</a>
-              <div class="panel"> 
-                <div class="desc">
-                  <span class="title">{{item.trans}} Transactions</span>
-                  <span class="time">{{prettytime(item.timestamp)}} ago</span>
-                </div>
-                <div class="desc">
-                  <span class="title">Miner</span>
-                  <a class="miner" href="#">{{item.miner}}</a>
-                </div>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
       </el-row>
       <el-row class="transactions">
         <el-col class="inner">
@@ -100,7 +46,7 @@
 import {utils} from 'web3';
 import axios from "../utils/axios";
 export default {
-  name: 'HomePage',
+  name: 'TransactionsPage',
   props: {
   },
   data(){
@@ -110,27 +56,9 @@ export default {
         1: "Contract Creation" ,
         2: "Contract Call " ,
       },
-      block:{
-        block_height:1,
-        total_difficulty:"0x1488",
-        total_transactions:1,
-        block_time:10,
-        blocks:[
-          {id:1,timestamp:0,},
-          {id:0,timestamp:0,},
-        ],
-        transactions:[
-          {
-            block_number:"1",
-            value:"0x",
-            kind:0,
-            from:"0x00000000000000000000000000000000",
-            to:"0x00000000000000000000000000000000",
-            hash:"0x00000000000000000000000000000000",
-          },
-        ],
-      },
       keyword:"",
+      block:{
+      },
       timerRefresh:null,
     }
    },
@@ -178,7 +106,6 @@ export default {
       return t
     },
     hexToNumberString(s) {
-      if (s == '') { s = '0x'}
       return utils.hexToNumberString(s)
     },
     toTokens(s) {
