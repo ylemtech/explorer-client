@@ -7,7 +7,7 @@
           <span class="title">BaiST Blockchain Explorer</span>
         </el-col>
         <el-col class="menu">
-          <el-menu :default-active="activeMenu" style="border-bottom: none;" mode="horizontal" @select="selectMenu">
+          <el-menu style="border-bottom: none;" mode="horizontal" @select="selectMenu">
             <el-menu-item index="1">Home</el-menu-item>
             <el-menu-item index="2">Blocks</el-menu-item>
             <el-menu-item index="3">Transactions</el-menu-item>
@@ -17,35 +17,75 @@
           <el-input maxlength="64" placeholder="Please input block or tx hash" prefix-icon="el-icon-search" v-model="keyword"></el-input>
         </el-col>
       </el-row>
-      <el-row class="transactions">
-        <el-col class="inner">
-          <el-row class="head">
-            <el-col class="title"><h2>Transactions</h2></el-col>
-          </el-row>
-          <el-row v-for="item in result.transactions" :key="item.id" class="transaction">
-            <el-col  style="padding-bottom: 15px;">
-              <el-row :class="{body:true,contract:item.kind!==0}">
-                <el-col :class="{type:true,contract:item.kind!==0}">{{txType[item.kind]}}</el-col>
-                <el-col class="content">
-                  <div class="hash">
-                    <a :href='"/tx?id=" + item.hash' target="_blank">{{item.hash}}</a>
-                  </div>
-                  <div class="operation">
-                    <a href="#">{{item.from}}</a><span v-if="item.kind !== 1"> → </span><a href="#">{{item.to}}</a>
-                  </div>
-                  <div class="fee">{{thousands("" + toTokens(hexToNumberString(item.value)))}} BST</div>
-                </el-col>
-                <el-col class="block">
-                  <div class="num"><a :href='"/block?id=" + item.block_number' target="_blank">Block #{{thousands("" + item.block_number)}}</a></div>
-                  <div class="time">{{prettytime(item.timestamp)}} ago</div>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-pagination background layout="prev, pager, next" :total="result.page_count" :page-size="result.page_size" @current-change="pageChange" class="page-foot"></el-pagination>
-          </el-row>
-        </el-col>
+      <el-row class="detail">
+        <el-row class="head">
+          <el-col class="title"><h2>Transaction Detail</h2></el-col>
+        </el-row>
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Transaction Hash</el-col>
+          <el-col class="value">{{result.transaction.hash}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Transaction Kind</el-col>
+          <el-col class="value" >{{txType[result.transaction.kind]}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Block Number</el-col>
+          <el-col class="value"><a :href='"/block?id=" + result.transaction.block_number' target="_blank">#{{thousands("" + result.transaction.block_number)}}</a></el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Timestamp</el-col>
+          <el-col class="value">{{prettytime(result.transaction.timestamp)}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>From</el-col>
+          <el-col class="value"><a href="#">{{result.transaction.from}}</a></el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>To</el-col>
+          <el-col class="value"><a href="#">{{result.transaction.to}}</a></el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Value</el-col>
+          <el-col class="value">{{thousands("" + hexToNumberString(result.transaction.value))}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Gas Price</el-col>
+          <el-col class="value">{{thousands("" + hexToNumberString(result.transaction.gas_price))}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Gas Used</el-col>
+          <el-col class="value">{{thousands("" + hexToNumberString(result.transaction.gas))}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Nonce</el-col>
+          <el-col class="value">{{result.transaction.nonce}}</el-col>
+        </el-row>
+
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Input Data</el-col>
+          <el-col class="value">{{result.transaction.input}}</el-col>
+        </el-row>
       </el-row>
       <el-row class="foot">Copyright © 2000-2022 BaiShiTong All Rights Reserved. </el-row>
     </el-main>
@@ -66,22 +106,29 @@ export default {
         1: "Contract Creation" ,
         2: "Contract Call " ,
       },
-      activeMenu:"3",
       keyword:"",
       result:{
         page_count:0,
         page_size:10,
+        transaction:{
+          id:0,
+          hash:"",
+          timestamp:0,
+          value:"", 
+          kind:0,
+          block_number:0,
+          gas:"",
+          gas_price:"",
+        },
       },
     }
    },
-
   mounted() {
-    this.getTransations(1)
+    this.getTransaction(this.$route.query.id)
   },
-
   methods:{
-    async getTransations(page){
-      const {data:_data} = await axios.get('/api/v1/txs?page=' + page)
+    async getTransaction(id){
+      const {data:_data} = await axios.get('/api/v1/tx?id=' + id)
       this.result = _data
     },
     selectMenu(index) {
@@ -96,7 +143,7 @@ export default {
       }
     },
     pageChange(page){
-      this.getTransations(page)
+      this.getTransactions(this.$route.query.id,page)
     },
     thousands(s){
       return s.replace(/\d+/, function (n) {
@@ -172,6 +219,65 @@ export default {
   float:right;
   width:480px;
 }
+.detail {
+  border:solid 1px #eee;
+  border-radius: 4px;
+  margin:15px 50px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
+  padding-right: 15px;
+  min-height: 230px;
+}
+.detail .head {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 60px;
+  height: 60px; 
+  text-align: left;
+  display: flex;
+  padding-bottom: 80px;
+}
+.detail .head .title{
+  text-align:left;
+  padding-left:15px;
+}
+.detail .head .title h2{
+  margin: 0px;
+  padding: 0px;
+  line-height: 60px;
+}
+.detail .item {
+  display:flex;
+  padding-bottom:10px;
+}
+.detail .item .title{
+  width:280px;
+  text-align:left;
+  padding-left:20px;
+  font-size:15px;
+  font-weight:500;
+  color:#6c757d;
+  display:flex;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.detail .item .title img{
+  width:20px;
+  height:20px;
+  padding-right:5px;
+}
+.detail .item .value{
+  flex:1;
+  text-align:left;
+  padding-left:20px;
+  font-size:14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.detail .item a{
+  text-decoration: none;
+}
 
 .transactions {
   border:solid 1px #eee;
@@ -245,9 +351,6 @@ export default {
   width:100%;
   padding:10px 20px;
   text-align:left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .transaction .hash{

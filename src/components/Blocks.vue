@@ -17,31 +17,34 @@
           <el-input maxlength="64" placeholder="Please input block or tx hash" prefix-icon="el-icon-search" v-model="keyword"></el-input>
         </el-col>
       </el-row>
-      <el-row class="transactions">
+      <el-row class="blocks">
         <el-col class="inner">
           <el-row class="head">
-            <el-col class="title"><h2>Transactions</h2></el-col>
+            <el-col class="title"><h2>Blocks</h2></el-col>
           </el-row>
-          <el-row v-for="item in result.transactions" :key="item.id" class="transaction">
-            <el-col  style="padding-bottom: 15px;">
-              <el-row :class="{body:true,contract:item.kind!==0}">
-                <el-col :class="{type:true,contract:item.kind!==0}">{{txType[item.kind]}}</el-col>
+          <el-row v-for="item in result.blocks" :key="item.id" class="block">
+            <el-col style="padding-bottom: 15px;">
+              <el-row class="body">
+                <el-col class="type">
+                  <div><a :href='"/block?id=" + item.id' target="_blank">#{{thousands("" + item.id)}}</a></div>
+                  <div>Block</div>
+                </el-col>
                 <el-col class="content">
-                  <div class="hash">
-                    <a :href='"/tx?id=" + item.hash' target="_blank">{{item.hash}}</a>
+                  <div class="trancount">
+                    {{item.transactions_count}} transactions {{thousands("" + item.size)}} bytes {{prettytime(item.timestamp)}} ago
                   </div>
                   <div class="operation">
-                    <a href="#">{{item.from}}</a><span v-if="item.kind !== 1"> → </span><a href="#">{{item.to}}</a>
+                    <span>Miner: </span><a href="#">{{item.miner}}</a>
                   </div>
-                  <div class="fee">{{thousands("" + toTokens(hexToNumberString(item.value)))}} BST</div>
                 </el-col>
-                <el-col class="block">
-                  <div class="num"><a :href='"/block?id=" + item.block_number' target="_blank">Block #{{thousands("" + item.block_number)}}</a></div>
-                  <div class="time">{{prettytime(item.timestamp)}} ago</div>
+                <el-col class="gas">
+                  <div class="gas-limit">{{thousands(hexToNumberString(item.gas_limit))}} Gas Limit</div>
+                  <div class="gas-used">{{thousands(hexToNumberString(item.gas_used))}} Gas Used</div>
                 </el-col>
               </el-row>
             </el-col>
           </el-row>
+       
           <el-row>
             <el-pagination background layout="prev, pager, next" :total="result.page_count" :page-size="result.page_size" @current-change="pageChange" class="page-foot"></el-pagination>
           </el-row>
@@ -56,32 +59,26 @@
 import {utils} from 'web3';
 import axios from "../utils/axios";
 export default {
-  name: 'TransactionsPage',
+  name: 'BlocksPage',
   props: {
   },
   data(){
     return {
-      txType:{
-        0: "Transaction",
-        1: "Contract Creation" ,
-        2: "Contract Call " ,
-      },
-      activeMenu:"3",
+      activeMenu:"2",
       keyword:"",
       result:{
         page_count:0,
         page_size:10,
       },
     }
-   },
-
+  },
   mounted() {
     this.getTransations(1)
   },
 
   methods:{
     async getTransations(page){
-      const {data:_data} = await axios.get('/api/v1/txs?page=' + page)
+      const {data:_data} = await axios.get('/api/v1/blocks?page=' + page)
       this.result = _data
     },
     selectMenu(index) {
@@ -138,13 +135,12 @@ export default {
 .el-container{
   padding-bottom: 10px;
 }
-
 .el-main{
   padding: 0;
 }
-
-.header{display:flex;
- height:60px;
+.header{
+  display:flex;
+  height:60px;
 }
 .header .container{
   display:flex;
@@ -173,7 +169,7 @@ export default {
   width:480px;
 }
 
-.transactions {
+.blocks {
   border:solid 1px #eee;
   border-radius: 4px;
   margin:15px 50px;
@@ -181,10 +177,10 @@ export default {
   padding-right: 5px;
   min-height: 230px;
 }
-.transactions .inner{
+.blocks .inner{
   padding:0 10px;
 }
-.transactions .head {
+.blocks .head {
     font-size: 18px;
     font-weight: 400;
     line-height: 60px;
@@ -192,23 +188,20 @@ export default {
     text-align: left;
     display: flex;
 }
-.transactions .head .title{
+.blocks .head .title{
   text-align:left;
   padding-left:5px;
 }
-.transactions .head .title h2{
+.blocks .head .title h2{
   margin: 0px;
   padding: 0px;
   line-height: 60px;
 }
-.transactions .head .button{
-  text-align:right;
-  white-space:nowrap;
-}
-.transactions .transaction{
+
+.blocks .block{
   padding: 0 0px;
 }
-.transaction .body{
+.block .body{
   display: flex;
   border: 1px solid #dee2e6;
   border-radius: 4px;
@@ -218,29 +211,25 @@ export default {
   line-height: 1.4rem;
   border-left: 4px solid #007bff;
 }
-.transaction .contract{
-  border-left: 4px solid #28a745;
-}
-.transaction .body .type{
+
+.block .body .type{
   background-color: rgba(0,123,255,.1);
   border-bottom: 1px solid #007bff;
   border-right: 1px solid #007bff;
   border-top: 1px solid #007bff;
   color: #007bff;
-  width:200px;
-  line-height: 75px;
+  width:180px;
+  line-height: 25px;
   padding: 10px;
   font-size: 14px;
   font-weight: 600;
 }
-.transaction .body .contract{
-  background-color: rgba(40,167,69,.1);
-  border-bottom: 1px solid #28a745;
-  border-right: 1px solid #28a745;
-  border-top: 1px solid #28a745;
-  color: #28a745;
+.block .type a{
+  color: #5959d8;
+  font-size: 14px;
+  text-decoration: none
 }
-.transaction .content{
+.block .content{
   flex:1;
   width:100%;
   padding:10px 20px;
@@ -250,44 +239,34 @@ export default {
   overflow: hidden;
 }
 
-.transaction .hash{
+.block .trancount{
   height:25px;
   line-height:25px;
+  font-size:14px;
 }
-.transaction .hash a{
-  color: rgb(89, 89, 216); 
-  font-size: 13px; 
-  text-decoration: none;
-}
-.transaction .operation{
+.block .operation{
   height:25px;
   line-height:25px;
+  font-size:14px;
 }
-.transaction .operation a{
+.block .operation a{
   color: #5959d8;
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none
 }
-.transaction .fee {
-  height: 25px;
-  line-height: 25px;
-  font-size: 14px;
-  font-weight: 500;
-}
-.transaction .block {
+
+.block .gas {
   width:200px;
   padding: 10px 20px;
 }
-.transaction .block .num{
-  padding-top:25px;
-}
-.transaction .block .num a{
-  color: #5959d8;
-  font-size: 13px;
-  text-decoration: none
-}
-.transaction .block .time{
+.block .gas-limit{
   height: 25px;
+  line-height: 25px;
+  font-size: 14px;
+}
+.block .gas-used{
+  height: 25px;
+  line-height: 25px;
   font-size: 14px;
 }
 .el-menu--horizontal>.el-menu-item {
