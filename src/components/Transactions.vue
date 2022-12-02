@@ -99,9 +99,13 @@ export default {
       this.getTransations(page)
     },
     thousands(s){
-      return s.replace(/\d+/, function (n) {
-        return n.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-      })
+      try{
+        return s.replace(/\d+/, function (n) {
+          return n.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+        })
+      } catch (e) {
+        return s
+      }
     },
     prettytime(timestamp){
       let now = new Date().getTime()
@@ -123,10 +127,26 @@ export default {
     },
     hexToNumberString(s) {
       if (s == '') { s = '0x'}
-      return utils.hexToNumberString(s)
+      try {
+        return utils.hexToNumberString(s)
+      } catch (e) {
+        return s
+      }
+    },
+    hexToAscii(s) {
+      if (s == '') { s = '0x'}
+      try {
+        return utils.hexToAscii(s)
+      } catch (e) {
+        return s
+      }
     },
     toTokens(s) {
-      return utils.fromWei(s, 'ether');
+      try{
+        return utils.fromWei(s, 'ether')
+      } catch (e) {
+        return s
+      }
     },
    }
 }

@@ -24,7 +24,7 @@
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>Height</el-col>
-          <el-col class="value">#{{result.block.id}}</el-col>
+          <el-col class="value"><b>#{{result.block.id}}</b></el-col>
         </el-row>
 
         <el-row class="item">
@@ -54,13 +54,13 @@
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>Hash</el-col>
-          <el-col class="value">{{result.block.hash}}</el-col>
+          <el-col class="value"><a href="#">{{result.block.hash}}</a></el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>Parent Hash</el-col>
-          <el-col class="value">{{result.block.parent_hash}}</el-col>
+          <el-col class="value"><a href="#">{{result.block.parent_hash}}</a></el-col>
         </el-row>
 
         <el-row class="item">
@@ -91,6 +91,11 @@
           <el-col class="title">
             <div><img src="/images/info.png"></div>Nonce</el-col>
           <el-col class="value">{{result.block.nonce}}</el-col>
+        </el-row>
+        <el-row class="item">
+          <el-col class="title">
+            <div><img src="/images/info.png"></div>Extra Data</el-col>
+          <el-col class="value">{{toExtraData(result.block.extra_data)}}</el-col>
         </el-row>
 
       </el-row>
@@ -159,6 +164,7 @@ export default {
           size:0,
           gas_used:"",
           gas_limit:"",
+          extra_data:"",
         },
         transactions:[],
       },
@@ -191,9 +197,13 @@ export default {
       this.getTransactions(this.$route.query.id,page)
     },
     thousands(s){
-      return s.replace(/\d+/, function (n) {
-        return n.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-      })
+      try{
+        return s.replace(/\d+/, function (n) {
+          return n.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+        })
+      } catch (e) {
+        return s
+      }
     },
     prettytime(timestamp){
       let now = new Date().getTime()
@@ -215,14 +225,36 @@ export default {
     },
     hexToNumberString(s) {
       if (s == '') { s = '0x'}
-      return utils.hexToNumberString(s)
+      try {
+        return utils.hexToNumberString(s)
+      } catch (e) {
+        return s
+      }
+    },
+    hexToAscii(s) {
+      if (s == '') { s = '0x'}
+      try {
+        return utils.hexToAscii(s)
+      } catch (e) {
+        return s
+      }
     },
     toTokens(s) {
-      return utils.fromWei(s, 'ether');
+      try{
+        return utils.fromWei(s, 'ether')
+      } catch (e) {
+        return s
+      }
+    },
+    toExtraData(s) {
+      let hex = this.hexToAscii(s)
+      if (hex == "") {
+        return ""
+      }
+      return hex + "(Hex:" + s + ")"
     },
    }
 }
-
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
@@ -319,6 +351,11 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.detail .item a{
+  color: rgb(89, 89, 216); 
+  font-size: 13px; 
+  text-decoration: none;
 }
 
 .transactions {
