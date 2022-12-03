@@ -26,7 +26,7 @@
             <el-col style="padding-bottom: 15px;">
               <el-row class="body">
                 <el-col class="type">
-                  <div><a :href='"/block?id=" + item.id' target="_blank">#{{thousands("" + item.id)}}</a></div>
+                  <div><a :href='"#/block?id=" + item.id' target="_blank">#{{thousands("" + item.id)}}</a></div>
                   <div>Block</div>
                 </el-col>
                 <el-col class="content">
@@ -56,8 +56,9 @@
 </template>
 
 <script>
-import {utils} from 'web3';
-import axios from "../utils/axios";
+import {utils} from 'web3'
+import axios from "../utils/axios"
+import website from "../utils/config"
 export default {
   name: 'BlocksPage',
   props: {
@@ -78,7 +79,7 @@ export default {
 
   methods:{
     async getTransations(page){
-      const {data:_data} = await axios.get('/api/v1/blocks?page=' + page)
+      const {data:_data} = await axios.get(website + '/api/v1/blocks?page=' + page)
       this.result = _data
     },
     selectMenu(index) {

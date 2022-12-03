@@ -110,7 +110,7 @@
                 <el-col :class="{type:true,contract:item.kind!==0}">{{txType[item.kind]}}</el-col>
                 <el-col class="content">
                   <div class="hash">
-                    <a :href='"/tx?id=" + item.hash' target="_blank">{{item.hash}}</a>
+                    <a :href='"#/tx?id=" + item.hash' target="_blank">{{item.hash}}</a>
                   </div>
                   <div class="operation">
                     <a href="#">{{item.from}}</a><span v-if="item.kind !== 1"> → </span><a href="#">{{item.to}}</a>
@@ -135,8 +135,9 @@
 </template>
 
 <script>
-import {utils} from 'web3';
-import axios from "../utils/axios";
+import {utils} from 'web3'
+import axios from "../utils/axios"
+import website from "../utils/config"
 export default {
   name: 'TransactionsPage',
   props: {
@@ -175,11 +176,11 @@ export default {
   },
   methods:{
     async getBlock(id,page){
-      const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
+      const {data:_data} = await axios.get(website + '/api/v1/block?id=' + id + "&page=" + page)
       this.result = _data
     },
     async getTransactions(id,page){
-      const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
+      const {data:_data} = await axios.get(website + '/api/v1/block?id=' + id + "&page=" + page)
       this.result.transactions = _data.transactions
     },
     selectMenu(index) {

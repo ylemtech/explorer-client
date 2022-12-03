@@ -36,7 +36,7 @@
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>Block Number</el-col>
-          <el-col class="value"><a :href='"/block?id=" + result.transaction.block_number' target="_blank">#{{thousands("" + result.transaction.block_number)}}</a></el-col>
+          <el-col class="value"><a :href='"#/block?id=" + result.transaction.block_number' target="_blank">#{{thousands("" + result.transaction.block_number)}}</a></el-col>
         </el-row>
 
         <el-row class="item">
@@ -93,8 +93,9 @@
 </template>
 
 <script>
-import {utils} from 'web3';
-import axios from "../utils/axios";
+import {utils} from 'web3'
+import axios from "../utils/axios"
+import website from "../utils/config"
 export default {
   name: 'TransactionsPage',
   props: {
@@ -128,7 +129,7 @@ export default {
   },
   methods:{
     async getTransaction(id){
-      const {data:_data} = await axios.get('/api/v1/tx?id=' + id)
+      const {data:_data} = await axios.get(website + '/api/v1/tx?id=' + id)
       this.result = _data
     },
     selectMenu(index) {

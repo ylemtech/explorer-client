@@ -56,7 +56,7 @@
           <el-col v-for="item in result.blocks" :key="item.id" class="container">
             <div class="content">
             
-              <a class="number" :href='"/block?id=" + item.id' target="_blank">#{{thousands("" + item.id)}}</a>
+              <a class="number" :href='"#/block?id=" + item.id' target="_blank">#{{thousands("" + item.id)}}</a>
               <div class="panel"> 
                 <div class="desc">
                   <span class="title">{{item.trans}} Transactions</span>
@@ -83,7 +83,7 @@
                 <el-col v-bind:class="{type:true,contract:item.kind!==0}">{{txType[item.kind]}}</el-col>
                 <el-col class="content">
                   <div class="hash">
-                    <a :href='"/tx?id=" + item.hash' target="_blank">{{item.hash}}</a>
+                    <a :href='"#/tx?id=" + item.hash' target="_blank">{{item.hash}}</a>
                   </div>
                   <div class="operation">
                     <a href="#">{{item.from}}</a><span v-if="item.kind !== 1"> → </span><a href="#">{{item.to}}</a>
@@ -91,7 +91,7 @@
                   <div class="fee">{{thousands("" + toTokens(hexToNumberString(item.value)))}} BST</div>
                 </el-col>
                 <el-col class="block">
-                  <div class="num"><a :href='"/block?id=" + item.block_number' target="_blank" >Block #{{thousands("" + item.block_number)}}</a></div>
+                  <div class="num"><a :href='"#/block?id=" + item.block_number' target="_blank" >Block #{{thousands("" + item.block_number)}}</a></div>
                   <div class="time">{{prettytime(item.timestamp)}} ago</div>
                 </el-col>
               </el-row>
@@ -105,8 +105,9 @@
 </template>
 
 <script>
-import {utils} from 'web3';
-import axios from "../utils/axios";
+import {utils} from 'web3'
+import axios from "../utils/axios"
+import website from "../utils/config"
 export default {
   name: 'HomePage',
   props: {
@@ -159,7 +160,7 @@ export default {
 
   methods:{
     async getBlock(){
-      const {data:_data} = await axios.get('/api/v1/bc')
+      const {data:_data} = await axios.get(website + '/api/v1/bc')
       this.result = _data
     },
     viewBlocks(){
