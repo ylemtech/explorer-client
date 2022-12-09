@@ -1,6 +1,9 @@
 {
-  "name": "explorer-client",
+  "name": "blockexplorer",
+  "productName": "Block Explorer",
   "version": "1.0.0",
+  "author": "NanJing BaiShiTong Co.",
+  "description": "Block Explorer for BaiST bockchain",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

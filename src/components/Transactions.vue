@@ -55,7 +55,6 @@
 <script>
 import {utils} from 'web3'
 import axios from "../utils/axios"
-import website from "../utils/config"
 export default {
   name: 'TransactionsPage',
   props: {
@@ -82,7 +81,7 @@ export default {
 
   methods:{
     async getTransations(page){
-      const {data:_data} = await axios.get(website + '/api/v1/txs?page=' + page)
+      const {data:_data} = await axios.get('/api/v1/txs?page=' + page)
       this.result = _data
     },
     selectMenu(index) {

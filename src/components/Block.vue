@@ -137,7 +137,6 @@
 <script>
 import {utils} from 'web3'
 import axios from "../utils/axios"
-import website from "../utils/config"
 export default {
   name: 'TransactionsPage',
   props: {
@@ -176,11 +175,11 @@ export default {
   },
   methods:{
     async getBlock(id,page){
-      const {data:_data} = await axios.get(website + '/api/v1/block?id=' + id + "&page=" + page)
+      const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
       this.result = _data
     },
     async getTransactions(id,page){
-      const {data:_data} = await axios.get(website + '/api/v1/block?id=' + id + "&page=" + page)
+      const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
       this.result.transactions = _data.transactions
     },
     selectMenu(index) {

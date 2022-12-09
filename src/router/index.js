@@ -10,7 +10,7 @@ import Transaction from '../components/Transaction.vue'
 Vue.use(VueRouter)
  
 const router = new VueRouter({
-    mode: 'hash',
+    mode: 'history', // hash for electron 
     routes: [
         {
             path:"/",

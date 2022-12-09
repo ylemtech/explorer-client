@@ -107,7 +107,6 @@
 <script>
 import {utils} from 'web3'
 import axios from "../utils/axios"
-import website from "../utils/config"
 export default {
   name: 'HomePage',
   props: {
@@ -160,7 +159,7 @@ export default {
 
   methods:{
     async getBlock(){
-      const {data:_data} = await axios.get(website + '/api/v1/bc')
+      const {data:_data} = await axios.get('/api/v1/bc')
       this.result = _data
     },
     viewBlocks(){

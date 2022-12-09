@@ -1,5 +1,23 @@
 # explorer-client
 
+## sumary
+```
+本项目是一个electron客户端和网站的混合项目。
+electron客户端是一个套壳网站。
+
+网站：
+网站后端代码为：explorer-server，所需的js、css、html资源通过本项目编译。
+编译命令为：npm run build
+生成结果位于dist目录中，直接复制到explorer-server的static目录。
+然后将其中的index.html的内容，复制views的index.tpl中。
+在index.tpl中，前后追加{{define "index.tpl"}} {{end}}。
+
+electron：
+运行调试： npm run electron:serve
+mac打包： npm run electron:build
+win打包： npm run electron:buildwin
+```
+
 ## Project setup
 ```
 npm install
@@ -36,9 +54,11 @@ vue add electron-builder
 
 ### Electron Command
 ```
-运行命令：
+// 运行命令：
 npm run electron:serve
-构建命令：
+// 按照当前系统的构建命令：
+npm run electron:build
+// 按照windows系统的构建命令：
 npm run electron:build
 
 构建时如下需翻墙，可以如下：
@@ -52,7 +72,7 @@ link:https://juejin.cn/post/6844904122026573831
 ```
 const win = new BrowserWindow({
   webPreferences: {
-    webSecurity: false //
+    webSecurity: false // remove security
   }
 }
 ```
@@ -62,8 +82,10 @@ const win = new BrowserWindow({
 位于/router的index.js文件中
 部署网站需要:
 mode: 'history'
-部署App:
+
+部署electron:
 mode: 'hash',需要#分割
+
 如果不正确会导致白屏
 link:https://www.pudn.com/news/6364e576a4b7e43a5e37a2c3.html
 ```
@@ -90,16 +112,6 @@ link:https://learnblockchain.cn/docs/web3.js/web3-utils.html#hextoascii
 ### Electron Bulid
 ```
 npm config edit
-
 electron_mirror=https://npm.taobao.org/mirrors/electron/
 electron-builder-binaries_mirror=https://npm.taobao.org/mirrors/electron-builder-binaries/
-```
-
-### Electron white screen issue
-```
-const win = new BrowserWindow({})
-// followed at once
-win.once('ready-to-show', () => {
-  win.show()
-})
 ```
