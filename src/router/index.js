@@ -6,6 +6,8 @@ import Blocks from '../components/Blocks.vue'
 import Transactions from '../components/Transactions.vue'  
 import Block from '../components/Block.vue' 
 import Transaction from '../components/Transaction.vue' 
+import Address from '../components/Address.vue' 
+import ErrorPage from '../components/ErrorPage.vue' 
 
 Vue.use(VueRouter)
  
@@ -14,7 +16,8 @@ const router = new VueRouter({
     routes: [
         {
             path:"/",
-            component:Home
+            component:Home,
+            
         },
         {
             path:"/blocks",
@@ -31,6 +34,17 @@ const router = new VueRouter({
         {
             path:"/tx",
             component:Transaction
+        },
+        {
+            path:"/addr",
+            component:Address,
+            meta:{
+              keepAlive:false  
+            }
+        },
+        {
+            path:"/error",
+            component:ErrorPage
         },
     ]
 })

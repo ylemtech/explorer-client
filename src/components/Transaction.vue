@@ -1,22 +1,6 @@
 <template>
   <el-container>
     <el-main>
-      <el-row class="header">
-        <el-col class="container">
-          <img src="/images/logo.png" class="logo">
-          <span class="title">BaiST Blockchain Explorer</span>
-        </el-col>
-        <el-col class="menu">
-          <el-menu style="border-bottom: none;" mode="horizontal" @select="selectMenu">
-            <el-menu-item index="1">Home</el-menu-item>
-            <el-menu-item index="2">Blocks</el-menu-item>
-            <el-menu-item index="3">Transactions</el-menu-item>
-          </el-menu>
-        </el-col>
-        <el-col class="search">
-          <el-input maxlength="64" placeholder="Please input block or tx hash" prefix-icon="el-icon-search" v-model="keyword"></el-input>
-        </el-col>
-      </el-row>
       <el-row class="detail">
         <el-row class="head">
           <el-col class="title"><h2>Transaction Detail</h2></el-col>
@@ -36,7 +20,7 @@
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>Block Number</el-col>
-          <el-col class="value"><a :href='"#/block?id=" + result.transaction.block_number' target="_blank">#{{thousands("" + result.transaction.block_number)}}</a></el-col>
+          <el-col class="value"><router-link :to='"/block?id=" + result.transaction.block_number' >#{{thousands("" + result.transaction.block_number)}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
@@ -48,13 +32,13 @@
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>From</el-col>
-          <el-col class="value"><a href="#">{{result.transaction.from}}</a></el-col>
+          <el-col class="value"><router-link :to='"/addr?addr=" + result.transaction.from'>{{result.transaction.from}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>To</el-col>
-          <el-col class="value"><a href="#">{{result.transaction.to}}</a></el-col>
+          <el-col class="value"><router-link :to='"/addr?addr=" + result.transaction.from'>{{result.transaction.to}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
@@ -87,7 +71,7 @@
           <el-col class="value">{{result.transaction.input}}</el-col>
         </el-row>
       </el-row>
-      <el-row class="foot">Copyright © 2000-2022 BaiShiTong All Rights Reserved. </el-row>
+      <el-row class="foot">Copyright © ylemscan.io All Rights Reserved. </el-row>
     </el-main>
   </el-container>
 </template>
@@ -106,7 +90,6 @@ export default {
         1: "Contract Creation" ,
         2: "Contract Call " ,
       },
-      keyword:"",
       result:{
         page_count:0,
         page_size:10,
@@ -130,17 +113,6 @@ export default {
     async getTransaction(id){
       const {data:_data} = await axios.get('/api/v1/tx?id=' + id)
       this.result = _data
-    },
-    selectMenu(index) {
-      if (index == "1") {
-        this.$router.push('/');
-      }
-      if (index == "2") {
-        this.$router.push('/blocks');
-      }
-      if (index == "3") {
-        this.$router.push('/txs');
-      }
     },
     pageChange(page){
       this.getTransactions(this.$route.query.id,page)
@@ -209,36 +181,6 @@ export default {
 .el-main{
   padding: 0;
 }
-
-.header{display:flex;
- height:60px;
-}
-.header .container{
-  display:flex;
-  padding: 10px 0px 10px 50px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.header .menu{
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.header .logo{
-  height:40px;
-  width:40px
-}
-.header .title{
-  padding-left:10px;
-  height:40px;
-  line-height:40px
-}
-.header .search{
-  padding: 10px 50px 10px 0;
-  float:right;
-  width:480px;
-}
 .detail {
   border:solid 1px #eee;
   border-radius: 4px;
@@ -296,7 +238,7 @@ export default {
   overflow: hidden;
 }
 .detail .item a{
-  color: rgb(89, 89, 216); 
+  color: #7e74ec; 
   font-size: 13px; 
   text-decoration: none;
 }
@@ -307,7 +249,7 @@ export default {
   margin:15px 50px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
   padding-right: 5px;
-  min-height: 230px;
+  min-height: 200px;
 }
 .transactions .inner{
   padding:0 10px;
@@ -344,17 +286,17 @@ export default {
   flex-grow: 1;
   font-size: 12px;
   line-height: 1.4rem;
-  border-left: 4px solid #007bff;
+  border-left: 4px solid #7e74ec;
 }
 .transaction .contract{
   border-left: 4px solid #28a745;
 }
 .transaction .body .type{
   background-color: rgba(0,123,255,.1);
-  border-bottom: 1px solid #007bff;
-  border-right: 1px solid #007bff;
-  border-top: 1px solid #007bff;
-  color: #007bff;
+  border-bottom: 1px solid #7e74ec;
+  border-right: 1px solid #7e74ec;
+  border-top: 1px solid #7e74ec;
+  color: #7e74ec;
   width:200px;
   line-height: 75px;
   padding: 10px;
@@ -380,7 +322,7 @@ export default {
   line-height:25px;
 }
 .transaction .hash a{
-  color: rgb(89, 89, 216); 
+  color: #7e74ec; 
   font-size: 13px; 
   text-decoration: none;
 }
@@ -389,7 +331,7 @@ export default {
   line-height:25px;
 }
 .transaction .operation a{
-  color: #5959d8;
+  color: #7e74ec;
   font-size: 13px;
   text-decoration: none
 }
@@ -420,11 +362,15 @@ export default {
   line-height: 50px;
 }
 .page-foot{
-  margin-bottom: 10px;
+  margin: 30px;
 }
 .foot{
   font-size: 13px;
   padding-bottom: 10px;
   color: #999;
+}
+:deep(.el-pagination.is-background .el-pager li:not(.disabled).active) {
+    background-color: #7e74ec !important;
+    color: #FFF;
 }
 </style>

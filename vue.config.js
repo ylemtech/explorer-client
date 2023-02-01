@@ -27,5 +27,17 @@ module.exports = {
         // }
       },
     } 
+  },
+    // 代理
+    devServer: {
+      proxy: {
+          '/root': {
+              changeOrigin: true,
+              target: 'http://192.168.0.127:9000',
+              pathRewrite: {
+                  '^/root': ''
+              },
+          },
+      }
   }
 }

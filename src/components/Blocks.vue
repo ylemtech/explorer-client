@@ -1,22 +1,6 @@
 <template>
   <el-container>
     <el-main>
-      <el-row class="header">
-        <el-col class="container">
-          <img src="/images/logo.png" class="logo">
-          <span class="title">BaiST Blockchain Explorer</span>
-        </el-col>
-        <el-col class="menu">
-          <el-menu :default-active="activeMenu" style="border-bottom: none;" mode="horizontal" @select="selectMenu">
-            <el-menu-item index="1">Home</el-menu-item>
-            <el-menu-item index="2">Blocks</el-menu-item>
-            <el-menu-item index="3">Transactions</el-menu-item>
-          </el-menu>
-        </el-col>
-        <el-col class="search">
-          <el-input maxlength="64" placeholder="Please input block or tx hash" prefix-icon="el-icon-search" v-model="keyword"></el-input>
-        </el-col>
-      </el-row>
       <el-row class="blocks">
         <el-col class="inner">
           <el-row class="head">
@@ -26,7 +10,7 @@
             <el-col style="padding-bottom: 15px;">
               <el-row class="body">
                 <el-col class="type">
-                  <div><a :href='"#/block?id=" + item.id' target="_blank">#{{thousands("" + item.id)}}</a></div>
+                  <div><router-link :to='"/block?id=" + item.id' >#{{thousands("" + item.id)}}</router-link></div>
                   <div>Block</div>
                 </el-col>
                 <el-col class="content">
@@ -34,7 +18,7 @@
                     {{item.transactions_count}} transactions {{thousands("" + item.size)}} bytes {{prettytime(item.timestamp)}} ago
                   </div>
                   <div class="operation">
-                    <span>Miner: </span><a href="#">{{item.miner}}</a>
+                    <span>Miner: </span><router-link :to='"/addr?addr=" + item.miner'>{{item.miner}}</router-link>
                   </div>
                 </el-col>
                 <el-col class="gas">
@@ -50,7 +34,7 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row class="foot">Copyright © 2000-2022 BaiShiTong All Rights Reserved. </el-row>
+      <el-row class="foot">Copyright © ylemscan.io All Rights Reserved. </el-row>
     </el-main>
   </el-container>
 </template>
@@ -64,8 +48,6 @@ export default {
   },
   data(){
     return {
-      activeMenu:"2",
-      keyword:"",
       result:{
         page_count:0,
         page_size:10,
@@ -80,17 +62,6 @@ export default {
     async getTransations(page){
       const {data:_data} = await axios.get('/api/v1/blocks?page=' + page)
       this.result = _data
-    },
-    selectMenu(index) {
-      if (index == "1") {
-        this.$router.push('/');
-      }
-      if (index == "2") {
-        this.$router.push('/blocks');
-      }
-      if (index == "3") {
-        this.$router.push('/txs');
-      }
     },
     pageChange(page){
       this.getTransations(page)
@@ -158,37 +129,6 @@ export default {
 .el-main{
   padding: 0;
 }
-.header{
-  display:flex;
-  height:60px;
-}
-.header .container{
-  display:flex;
-  padding: 10px 0px 10px 50px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.header .menu{
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.header .logo{
-  height:40px;
-  width:40px
-}
-.header .title{
-  padding-left:10px;
-  height:40px;
-  line-height:40px
-}
-.header .search{
-  padding: 10px 50px 10px 0;
-  float:right;
-  width:480px;
-}
-
 .blocks {
   border:solid 1px #eee;
   border-radius: 4px;
@@ -224,20 +164,19 @@ export default {
 .block .body{
   display: flex;
   border: 1px solid #dee2e6;
-  border-radius: 4px;
+  border-radius: 5px;
   color: #6c757d;
   flex-grow: 1;
   font-size: 12px;
   line-height: 1.4rem;
-  border-left: 4px solid #007bff;
+  /* border-left: 4px solid #7e74ec; */
 }
 
 .block .body .type{
-  background-color: rgba(0,123,255,.1);
-  border-bottom: 1px solid #007bff;
-  border-right: 1px solid #007bff;
-  border-top: 1px solid #007bff;
-  color: #007bff;
+  background-color: rgba(95, 81, 255, 0.03);
+  border: 1px solid #7e74ec;
+  border-radius: 5px;
+  color: #7e74ec;
   width:180px;
   line-height: 25px;
   padding: 10px;
@@ -294,11 +233,15 @@ export default {
   line-height: 50px;
 }
 .page-foot{
-  margin-bottom: 10px;
+  margin: 30px;
 }
 .foot{
   font-size: 13px;
   padding-bottom: 10px;
   color: #999;
+}
+:deep(.el-pagination.is-background .el-pager li:not(.disabled).active) {
+    background-color: #7e74ec !important;
+    color: #FFF;
 }
 </style>
