@@ -14,32 +14,88 @@
             class="transaction"
           >
             <el-col style="padding-bottom: 10px">
-              <el-row  :class="{ body: true, contract: item.kind !== 0 }">
-                <el-col  :class="{ type: true, contract: item.kind !== 0 }">{{
-                  $t(txType[item.kind])
-                }}
+              <el-row :class="{ body: true, contract: item.kind !== 0 }">
+                <el-col :class="{ type: true, contract: item.kind !== 0 }"
+                  >{{ $t(txType[item.kind]) }}
                 </el-col>
                 <el-col class="content">
-                  <div class="hash">
+                  <!-- <div class="hash">
                     {{ $t("hash") }}
                     <router-link :to="'/tx?id=' + item.hash">{{
-                      item.hash
+                      item.hash | filterHash
                     }}</router-link>
-                  </div>
+                  </div> -->
                   <div class="operation">
+                    {{ $t("hash") }}
+                    <router-link :to="'/tx?id=' + item.hash">{{
+                      item.hash | filterHash
+                    }}</router-link>
                     {{ $t("from") }}
                     <router-link :to="'/addr?addr=' + item.from">
-                      {{ item.from }}</router-link
+                      {{ item.from | addressEll }}</router-link
                     ><span v-if="item.kind !== 1"> → {{ $t("to") }} </span
                     ><router-link :to="'/addr?addr=' + item.to">{{
-                      item.to 
+                      item.to | addressEll
                     }}</router-link>
                   </div>
-                  <div class="fee">
-                    {{
-                      thousands("" + toTokens(hexToNumberString(item.value)))
-                    }}
-                    YLEM
+                  <div class="bottom flex-row">
+                    <div class="bottom-box">
+                      <span class="contract-type" v-if="item.type == 1"
+                        >ERC-721</span
+                      >
+                      <span class="contract-type" v-if="item.type == 2"
+                        >ERC-1155</span
+                      >
+                    </div>
+                    <div class="bottom-box">
+                      <span>{{ $t(Method) }}&nbsp;</span>
+                      <span class="value">{{ item.method }}</span>
+                    </div>
+                    <div class="bottom-box" v-if="item.value">
+                      <span>value&nbsp;</span>
+                      <span class="value">
+                        {{
+                          thousands(
+                            "" + toTokens(hexToNumberString(item.value))
+                          )
+                        }}&nbsp;YLEM</span
+                      >
+                    </div>
+                    <div class="bottom-box" v-if="item.gas">
+                      <span>gas</span>
+                      <span class="value">
+                        {{ "" + hexToNumberString(item.gas) }}
+                      </span>
+                    </div>
+                    <div class="" v-if="item.name">
+                      <span>item&nbsp;</span>
+                      <span class="value">{{ item.name }}&nbsp;&nbsp;</span>
+                    </div>
+                    <!-- <router-link :to="'/nft?id=' + result.transaction.hash"> -->
+                    <router-link
+                      :to="'/nft?id=' + item.hash"
+                      class="bottom-box"
+                      v-if="showNFT(item)"
+                    >
+                      <img
+                        v-if="!item.imageUri"
+                        :src="placeholder"
+                        alt=""
+                        class="nftImg"
+                      />
+                      <img
+                        v-if="item.imageUri"
+                        :src="item.imageUri || placeholder"
+                        alt=""
+                        class="nftImg"
+                      />
+                    </router-link>
+                    <!-- <div class="fee">
+                      {{
+                        thousands("" + toTokens(hexToNumberString(item.value)))
+                      }}
+                      YLEM
+                    </div> -->
                   </div>
                 </el-col>
                 <!-- <el-col class="nftBlock" v-if="item.imageUri">
@@ -85,6 +141,7 @@ export default {
   props: {},
   data() {
     return {
+      placeholder: "./images/NFT.png",
       txType: {
         0: "Transactions",
         1: "Contract Creation",
@@ -103,11 +160,32 @@ export default {
 
   methods: {
     async getTransations(page) {
-      const { data: _data } = await axios.get("/api/v1/txs?page=" + page);
+      const { data: _data } = await axios.get(
+        "/api/v1/txs?page=" + page + "&type=3"
+      );
+      _data.transactions.forEach((element) => {
+        var str = element.imageUri;
+        // let str2 = str.replace('https://ipfs.io/ipfs/', 'https://nftstorage.link/ipfs/')
+        let str2 = str.replace("https://ipfs.io", "https://nftstorage.link");
+        // .ipfs.nftstorage.link
+        element.imageUri = str2;
+        // console.log(element.imageUri);
+      });
       this.result = _data;
     },
     pageChange(page) {
       this.getTransations(page);
+    },
+    showNFT(item) {
+      if (
+        item.method == "mint" ||
+        item.method == "burn" ||
+        item.method == "safeTransferFrom" ||
+        item.method == "transferFrom"
+      ) {
+        return true;
+      }
+      return false;
     },
     thousands(s) {
       try {
@@ -178,6 +256,15 @@ export default {
 .el-main {
   padding: 0;
 }
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .transactions {
   border: solid 1px #eee;
   border-radius: 4px;
@@ -193,13 +280,13 @@ export default {
   width: 100px;
   margin-top: 10px;
 }
-  .nftImg {
-    width: 40px;
-    height: 40px;
-    margin-top: 0px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
+.nftImg {
+  width: 25px;
+  height: 25px;
+  margin-top: 2px;
+  object-fit: contain;
+  border-radius: 5px;
+}
 .transactions .head {
   font-size: 18px;
   font-weight: 400;
@@ -236,7 +323,6 @@ export default {
 }
 .transaction .contract {
   border-left: 0px solid #28a745;
-  
 }
 .transaction .body .type {
   background-color: rgba(95, 81, 255, 0.03);
@@ -244,9 +330,9 @@ export default {
   border-radius: 5px;
   color: #7e74ec;
   width: 120px;
-  height: 80px;
-  line-height: 60px;
-  padding: 10px;
+  height: 70px;
+  line-height: 70px;
+  padding: 0px;
   font-size: 14px;
   font-weight: 500;
 }
@@ -260,13 +346,31 @@ export default {
 .transaction .content {
   flex: 1;
   width: 100%;
-  padding: 5px 20px;
+  padding: 0px 20px;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-
+.bottom {
+  height: 30px;
+  line-height: 30px;
+}
+.bottom-box {
+  margin: 0 20px 0 0;
+  /* width: 100px; */
+}
+.contract-type {
+  border: #dee2e6 solid 1px;
+  border-radius: 10px;
+  height: 20px;
+  width: 80px;
+  padding: 2px 8px;
+  color: black;
+}
+.value {
+  color: #28a745;
+}
 .transaction .hash {
   height: 25px;
   line-height: 25px;
@@ -277,24 +381,29 @@ export default {
   text-decoration: none;
 }
 .transaction .operation {
-  height: 20px;
-  line-height: 20px;
+  height: 15px;
+  line-height: 15px;
+  margin: 15px 0 5px 0;
 }
 .transaction .operation a {
   color: #5959d8;
   font-size: 13px;
   text-decoration: none;
 }
-.transaction .fee {
+.transaction.content.bottom {
+  display: flex;
+}
+.transaction.content.fee {
   height: 25px;
   line-height: 25px;
   font-size: 13px;
   font-weight: 500;
+  float: left;
 }
 .transaction .block {
   justify-content: center;
   width: 200px;
-  padding: 10px 20px;
+  padding: 0px 20px;
 }
 .transaction .block .num {
   padding-top: 15px;
@@ -305,7 +414,7 @@ export default {
   text-decoration: none;
 }
 .transaction .block .time {
-  height: 25px;
+  height: 20px;
   font-size: 14px;
 }
 .el-menu--horizontal > .el-menu-item {

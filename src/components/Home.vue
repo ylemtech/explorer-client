@@ -6,7 +6,7 @@
           <el-row class="container-inner">
             <el-col class="block">
               <div class="container">
-                <div class="title">BLOCK HEIGHT</div>
+                <div class="title">{{$t('BLOCK HEIGHT')}}</div>
                 <div class="value">
                   {{ thousands("" + result.block_height) }}
                 </div>
@@ -14,13 +14,13 @@
             </el-col>
             <el-col class="block">
               <div class="container">
-                <div class="title">AVERAGE BLOCK TIME</div>
+                <div class="title">{{$t('AVERAGE BLOCK TIME')}}</div>
                 <div class="value">{{ result.block_time }} Seconds</div>
               </div>
             </el-col>
             <el-col class="block">
               <div class="container">
-                <div class="title">TOTAL TRANSACTIONS</div>
+                <div class="title">{{$t('TOTAL TRANSACTIONS')}}</div>
                 <div class="value">
                   {{ thousands("" + result.total_transactions) }}
                 </div>
@@ -28,7 +28,7 @@
             </el-col>
             <el-col class="block">
               <div class="container">
-                <div class="title">TOTAL DIFFICULTY</div>
+                <div class="title">{{$t('TOTAL DIFFICULTY')}}</div>
                 <div class="value">
                   {{
                     thousands("" + hexToNumberString(result.total_difficulty))
@@ -41,7 +41,7 @@
       </el-row>
       <el-row class="blocks">
         <el-row class="head">
-          <el-col class="title"><h2>Blocks</h2></el-col>
+          <el-col class="title"><h2>{{$t('Blocks')}}</h2></el-col>
           <el-col class="buttons">
             <!-- <el-button
               type="primary"
@@ -52,7 +52,7 @@
             >
             </el-button> -->
             <el-button type="primary" size="midium" round @click="viewBlocks()"
-              >View Blocks</el-button
+              >{{$t('View Blocks')}}</el-button
             >
           </el-col>
         </el-row>
@@ -63,17 +63,19 @@
             class="container"
           >
             <div class="content">
-              <router-link class="number" :to="'/block?id=' + item.id" 
+              <router-link class="number" :to="'/block?id=' + item.id"
                 >#{{ thousands("" + item.id) }}</router-link
               >
               <div class="panel">
                 <div class="desc">
-                  <span class="title">{{ item.trans }} Transactions</span>
+                  <span class="title">{{ item.trans }} {{$t('Transactions')}}</span>
                   <span class="time">{{ prettytime(item.timestamp) }} ago</span>
                 </div>
                 <div class="desc">
-                  <span class="title">Miner</span>
-                  <router-link class="miner" :to='"/addr?addr=" + item.miner'>{{ item.miner }}</router-link>
+                  <span class="title">{{$t('Miner')}}</span>
+                  <router-link class="miner" :to="'/addr?addr=' + item.miner">{{
+                    item.miner
+                  }}</router-link>
                 </div>
               </div>
             </div>
@@ -83,14 +85,14 @@
       <el-row class="transactions">
         <el-col class="inner">
           <el-row class="head">
-            <el-col class="title"><h2>Transactions</h2></el-col>
+            <el-col class="title"><h2>{{$t('Transactions')}}</h2></el-col>
             <el-col class="button"
               ><el-button
                 type="primary"
                 size="midium"
                 round
                 @click="viewTransactions()"
-                >View Transactions</el-button
+                >{{$t('View Transactions')}}</el-button
               ></el-col
             >
           </el-row>
@@ -103,18 +105,24 @@
               <el-row v-bind:class="{ body: true, contract: item.kind !== 0 }">
                 <el-col
                   v-bind:class="{ type: true, contract: item.kind !== 0 }"
-                  >{{ txType[item.kind] }}</el-col
+                  >{{ $t(txType[item.kind]) }}</el-col
                 >
                 <el-col class="content">
-                  <div class="hash">hash
-                    <router-link :to="'/tx?id=' + item.hash" >{{
+                  <div class="hash">
+                    {{$t('hash')}}
+                    <router-link :to="'/tx?id=' + item.hash">{{
                       item.hash
                     }}</router-link>
                   </div>
-                  <div class="operation">from
-                    <router-link :to='"/addr?addr=" + item.from'>{{ item.from }}</router-link
-                    ><span v-if="item.kind !== 1"> → to </span
-                    ><router-link :to='"/addr?addr=" + item.to'>{{ item.to }}</router-link>
+                  <div class="operation">
+                    {{$t('from')}}
+                    <router-link :to="'/addr?addr=' + item.from">{{
+                      item.from | addressEll
+                    }}</router-link
+                    ><span v-if="item.kind !== 1"> → {{$t('to')}} </span
+                    ><router-link :to="'/addr?addr=' + item.to">{{
+                      item.to | addressEll
+                    }}</router-link>
                   </div>
                   <div class="fee">
                     {{
@@ -125,8 +133,10 @@
                 </el-col>
                 <el-col class="block">
                   <div class="num">
-                    <router-link :to="'/block?id=' + item.block_number" 
-                      >Block #{{ thousands("" + item.block_number) }}</router-link
+                    <router-link :to="'/block?id=' + item.block_number"
+                      >{{$t('Block')}} #{{
+                        thousands("" + item.block_number)
+                      }}</router-link
                     >
                   </div>
                   <div class="time">{{ prettytime(item.timestamp) }} ago</div>
@@ -154,7 +164,7 @@ export default {
       txType: {
         0: "Transaction",
         1: "Contract Creation",
-        2: "Contract Call ",
+        2: "Contract Call",
       },
       result: {
         block_height: 1,
@@ -180,6 +190,9 @@ export default {
   },
 
   mounted() {
+    if (this.$route.query.lang) {
+      this.$i18n.locale = this.$route.query.lang
+    }
     this.getBlock();
     this.timerRefresh = setInterval(() => {
       this.getBlock();
@@ -199,16 +212,13 @@ export default {
       this.result = _data;
     },
     viewBlocks() {
-      let routeData = this.$router.resolve({ path: "/blocks" });
-      window.open(routeData.href, "_blank");
+      this.$router.push({ path: "/blocks" })
     },
     viewTransactions() {
-      let routeData = this.$router.resolve({ path: "/txs" });
-      window.open(routeData.href, "_blank");
+      this.$router.push({ path: "/txs" });
     },
     viewBlock(id) {
-      let routeData = this.$router.resolve({ path: "/block?id=" + id });
-      window.open(routeData.href, "_blank");
+      this.$router.push({ path: "/block?id=" + id });
     },
     thousands(s) {
       try {
@@ -225,18 +235,21 @@ export default {
       let span = now - timestamp;
       if (span <= 0) span = 1;
 
-      let t = "";
-      if (span >= 3600) {
-        t = "1 hour";
-      } else if (span >= 60) {
-        t = "1 minute";
-      } else if (span == 1) {
-        t = "1 second";
-      } else {
-        t = "" + span + " seconds";
+      var days = parseInt(span / ( 60 * 60 * 24));
+      if (days > 0) {
+        return days==1?days+"day":days+"days";
       }
-      return t;
+      var hours = parseInt((span % (60 * 60 * 24)) / ( 60 * 60));
+      if (hours > 0) {
+        return hours==1?hours+"h":hours+"hs";
+      }
+      var minutes = parseInt((span % ( 60 * 60)) / ( 60));
+      if (minutes > 0) {
+        return minutes==1?minutes+"min":minutes+"mins";
+      }
+      return span  + "s";
     },
+ 
     hexToNumberString(s) {
       if (s == "") {
         s = "0x";
@@ -280,7 +293,7 @@ export default {
 
 .total {
   display: flex;
-  overflow:hidden;
+  overflow: hidden;
   /* box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px; */
   height: 120px;
   margin: 30px 50px 0 50px;
@@ -296,7 +309,7 @@ export default {
 .total .block {
   max-width: 25%;
   padding: 20px;
-  margin-left:1%;
+  margin-left: 1%;
   line-height: 30px;
   background: #1b174d;
   border-radius: 6px 6px 0px 0px;
@@ -365,7 +378,7 @@ export default {
 }
 .blocks .block .container {
   flex: 0 0 25%;
-  max-width: 25%;
+  max-width: 20%;
   padding: 5px;
 }
 .blocks .block .content {
@@ -555,7 +568,7 @@ export default {
   border-color: #584cd6;
 }
 :deep(.el-pagination.is-background .el-pager li:not(.disabled).active) {
-    background-color: #5f51ff !important;
-    color: #FFF;
+  background-color: #5f51ff !important;
+  color: #fff;
 }
 </style>

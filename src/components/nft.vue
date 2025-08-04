@@ -2,146 +2,97 @@
   <el-container>
     <el-main>
       <el-row class="detail">
-        <el-row class="head">
-          <el-col class="title"
-            ><h2>{{ $t("Transaction Detail") }}</h2></el-col
-          >
-        </el-row>
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Transaction Hash") }}</el-col
-          >
-          <el-col class="value">{{ result.transaction.hash }}</el-col>
-        </el-row>
+        <div class="flex-row">
+          <div class="leftBox">
+            <img
+              v-if="result.imageUri"
+              :src="result.imageUri"
+              alt=""
+              class="nft-image"
+            />
+            <img v-else :src="placeholder" alt="" class="nft-image" />
+          </div>
+          <div class="rightBox">
+            <el-row class="head">
+              <el-col class="title"
+                ><h2>{{ $t("NFT Detail") }}</h2></el-col
+              >
+            </el-row>
+            <el-row class="item">
+              <el-col class="title">
+                <div><img src="/images/info.png" /></div>
+                {{ $t("Contract Address") }}</el-col
+              >
+              <el-col class="value">{{
+                result.to
+              }}</el-col>
+            </el-row>
 
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Transaction Kind") }}</el-col
-          >
-          <el-col class="value">{{
-            $t(txType[result.transaction.kind])
-          }}</el-col>
-        </el-row>
+            <el-row class="item">
+              <el-col class="title">
+                <div><img src="/images/info.png" /></div>
+                {{ $t("Owner") }}</el-col
+              >
+              <el-col class="value" v-if="result.receiver.length>0">{{
+                result.receiver
+              }}</el-col>
+              <el-col class="value" v-else>{{
+                result.sender
+              }}</el-col>
+            </el-row>
 
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Block") }}</el-col
-          >
-          <el-col class="value"
-            ><router-link :to="'/block?id=' + result.transaction.block_number"
-              >#{{
-                thousands("" + result.transaction.block_number)
-              }}</router-link
-            ></el-col
-          >
-        </el-row>
+            <!-- <el-row class="item">
+              <el-col class="title">
+                <div><img src="/images/info.png" /></div>
+                {{ $t("Creator") }}</el-col
+              >
+              <el-col class="value"
+                ><router-link
+                  :to="'/block?id=' + result.transaction.block_number"
+                  >#{{
+                    thousands("" + result.transaction.block_number)
+                  }}</router-link
+                ></el-col
+              >
+            </el-row> -->
 
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Timestamp") }}</el-col
-          >
-          <el-col class="value"
-            >{{ prettytime(result.transaction.timestamp) }} ago</el-col
-          >
-        </el-row>
+            <el-row class="item">
+              <el-col class="title">
+                <div><img src="/images/info.png" /></div>
+                {{ $t("Token ID") }}</el-col
+              >
+              <el-col class="value"
+                >{{result.tokenId}}</el-col
+              >
+            </el-row>
 
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("From") }}</el-col
-          >
-          <el-col class="value"
-            ><router-link :to="'/addr?addr=' + result.transaction.from">{{
-              result.transaction.from
-            }}</router-link></el-col
-          >
-        </el-row>
+            <el-row class="item">
+              <el-col class="title">
+                <div><img src="/images/info.png" /></div>
+                {{ $t("Token Standard") }}</el-col
+              >
+              <el-col class="value"
+                >{{
+                 $t(contractType[result.type])
+                }}</el-col
+              >
+            </el-row>
 
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("To") }}</el-col
-          >
-          <el-col class="value"
-            ><router-link :to="'/addr?addr=' + result.transaction.from">{{
-              result.transaction.to
-            }}</router-link></el-col
-          >
-        </el-row>
-
-        <el-row class="item" v-if="result.transaction.kind==0">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Value") }}</el-col
-          >
-          <el-col class="value">{{
-            thousands("" + hexToNumberString(result.transaction.value))
-          }}</el-col>
-        </el-row>
-
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Gas Price") }}</el-col
-          >
-          <el-col class="value">{{
-            ("" + hexToNumberString(result.transaction.gas_price))/1000000000
-          }}GWei</el-col>
-        </el-row>
-
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Transaction Fee") }}</el-col
-          >
-          <el-col class="value">{{
-            ("" + hexToNumberString(result.transaction.gas)/1000000000)
-          }}</el-col>
-        </el-row>
-
-        <el-row class="item">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Nonce") }}</el-col
-          >
-          <el-col class="value">{{ result.transaction.nonce }}</el-col>
-        </el-row>
-
-        <el-row class="item" v-if="result.transaction.input">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            {{ $t("Input Data") }}</el-col
-          >
-          <el-col class="value1">{{ result.transaction.input }}</el-col>
-        </el-row>
-        <el-row class="item" v-if="showNFT(result.transaction)">
-          <el-col class="title">
-            <div><img src="/images/info.png" /></div>
-            <span v-if="result.transaction.type==1">{{ $t("ERC-721 Tokens Transferred")}}</span>
-            <span v-if="result.transaction.type==2">{{ $t("ERC-1155 Tokens Transferred")}}</span>
-            </el-col>
-          <el-col class="value">
-            <div class="NFT-box">
-              <div >TOKEN ID [<span style="color:#7e74ec"> {{result.transaction.tokenId}}
-                </span>]&nbsp;{{result.transaction.name}}
-              </div>
-              <div style="margin-top:10px" v-if="result.transaction.receiver">
-                <span style="color:#7e74ec">{{result.transaction.sender| addressEll}}
-                </span>&nbsp; → &nbsp;<span style="color:#7e74ec">{{result.transaction.receiver| addressEll}}</span>
-                </div>
-              <router-link :to="'/nft?id=' + result.transaction.hash">
-               <img :src="result.transaction.imageUri" alt="" class="nft-image"/>
-               <img v-if="!result.transaction.imageUri" :src="placeholder" alt="" class="nft-image" />      
-              </router-link> 
-            </div>
-          </el-col>
-        </el-row>
+            <el-row class="item">
+              <el-col class="title">
+                <div><img src="/images/info.png" /></div>
+                {{ $t("Descrption") }}</el-col
+              >
+              <el-col class="value1"
+                >{{
+                  result.description
+                }}</el-col
+              >
+            </el-row>
+          </div>
+        </div>
       </el-row>
-    
+
       <!-- <el-row class="foot"
         >Copyright © ylemscan.io All Rights Reserved.
       </el-row> -->
@@ -152,17 +103,22 @@
 import { utils } from "web3";
 import axios from "../utils/axios";
 //import FileSaver from 'file-saver';
+// import { ethers } from "ethers";
 
 export default {
   name: "TransactionsPage",
   props: {},
   data() {
     return {
-      placeholder:"./images/NFT.png",
+      placeholder: "./images/NFT.png",
       txType: {
         0: "Transactions",
         1: "Contract Creation",
         2: "Contract Call",
+      },
+      contractType: {
+        1: "ERC-721",
+        2: "ERC-1155",
       },
       result: {
         page_count: 0,
@@ -178,16 +134,100 @@ export default {
           gas_price: "",
         },
       },
-      };
+      contract: null,
+      contractAddr: "",
+      contractAbi: `[
+        {
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+  {
+		"inputs": [],
+		"name": "contractURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]`,
+    };
   },
   mounted() {
+    this.result= this.$route.query;
+   
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // console.log(this.result.contractAddr, this.contractAbi);
+    // this.contract = new ethers.Contract(
+    //   this.result.contractAddr,
+    //   this.contractAbi,
+    //   provider.getSigner()
+    // );
+    // this.tokenURI();
     // var content = JSON.stringify({
     //   name: "heloo", name1: "heloo"
     // });
     // var blob = new Blob([content], {
     //   type: "text/plain;charset=utf-8",
     // });
-   // console.log(blob);
+    // console.log(blob);
     // let file = new File([content], `${1}.json`, {
     //   type: "application/json",
     // });
@@ -196,27 +236,27 @@ export default {
     this.getTransaction(this.$route.query.id);
   },
   methods: {
-   
     async getTransaction(id) {
       const { data: _data } = await axios.get("/api/v1/tx?id=" + id);
-      this.result = _data;
-       var str = _data.transaction.imageUri;
+      this.result = _data.transaction;
+        var str = _data.transaction.imageUri;
         // let str2 = str.replace('https://ipfs.io/ipfs/', 'https://nftstorage.link/ipfs/')
         let str2 = str.replace("https://ipfs.io", "https://nftstorage.link");
         // .ipfs.nftstorage.link
-         this.result.transaction.imageUri = str2;
+         this.result.imageUri = str2;
+      //       const abiERC20 = [
+      //     "function contractURI() view returns (string)",
+      //     "function ownerOf() view returns (string)",
+      //     "function balanceOf(address) view returns (uint)",
+      // ];
     },
-    pageChange(page) {
-      this.getTransactions(this.$route.query.id, page);
-    },
-      showNFT(item) {
-      if(item.method == "mint"||item.method == "burn"||item.method == "safeTransferFrom"||item.method == "transferFrom"){
-        return true
-      }
-      return false
-    },
-    tokenView(){
-       this.$router.push("/nfts");
+    async tokenURI() {
+      // const res = await this.contract.tokenURI(2);
+      // console.log(res)
+      // this.result.description = res;
+      // const res1 = await this.contract.ownerOf("2");
+      // console.log(res1)
+      // this.result.owner = res1;
     },
     thousands(s) {
       try {
@@ -287,21 +327,46 @@ export default {
 .el-main {
   padding: 0;
 }
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
 .detail {
   border: solid 1px #eee;
   border-radius: 4px;
   margin: 15px 50px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
-  padding: 40px;
-  min-height: 230px;
+  padding: 60px;
+  height: auto;
+  /* min-height: 230px; */
 }
-.NFT-box{
+.leftBox {
+  min-width: 300px;
+  height: auto;
+  min-height: 300px;
+  justify-content: center;
+  border: #dee2e6 solid 1px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 40%;
+}
+.rightBox {
+  width: 60%;
+  padding: 20px 40px 0 20px;
+}
+.NFT-box {
   line-height: 15px;
 }
-.nft-image{
-  height: 50px;
+.nft-image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
   border-radius: 5px;
-  margin-top: 10px;
+  background: #efeff0;
 }
 .detail .head {
   font-size: 18px;
@@ -324,6 +389,7 @@ export default {
 .detail .item {
   display: flex;
   padding-bottom: 10px;
+  line-height: 30px;
 }
 .detail .item .title {
   width: 280px;
@@ -341,6 +407,7 @@ export default {
   width: 20px;
   height: 20px;
   padding-right: 5px;
+  margin-top: 5px;
 }
 .detail .item .value {
   flex: 1;
@@ -356,9 +423,9 @@ export default {
   text-align: left;
   padding-left: 20px;
   font-size: 14px;
-  white-space: nowrap;
+  /* white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: hidden; */
 }
 .detail .item a {
   color: #7e74ec;

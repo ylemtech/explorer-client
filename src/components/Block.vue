@@ -3,106 +3,106 @@
     <el-main>
       <el-row class="detail">
         <el-row class="head">
-          <el-col class="title"><h2>Block Detail</h2></el-col>
+          <el-col class="title"><h2>{{$t('Block Detail')}}</h2></el-col>
         </el-row>
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Height</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Height')}}</el-col>
           <el-col class="value"><b>#{{result.block.id}}</b></el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Timestamp</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Timestamp')}}</el-col>
           <el-col class="value">{{prettytime(result.block.timestamp)}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Transactions</el-col>
-          <el-col class="value">{{result.block.transactions_count}} Transactions</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Transactions')}}</el-col>
+          <el-col class="value">{{result.block.transactions_count}} {{$t('Transactions')}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Miner</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Miner')}}</el-col>
           <el-col class="value"><router-link :to='"/addr?addr=" + result.block.miner'>{{result.block.miner}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Size</el-col>
-          <el-col class="value">{{thousands(""+result.block.size)}} bytes</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Size')}}</el-col>
+          <el-col class="value">{{thousands(""+result.block.size)}} {{$t('bytes')}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Hash</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Hash')}}</el-col>
           <el-col class="value"><router-link to="" >{{result.block.hash}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Parent Hash</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Parent Hash')}}</el-col>
           <el-col class="value"><router-link to="">{{result.block.parent_hash}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Difficulty</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Difficulty')}}</el-col>
           <el-col class="value">{{thousands("" + hexToNumberString(result.block.difficulty))}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Total Difficulty</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Total Difficulty')}}</el-col>
           <el-col class="value">{{thousands("" + hexToNumberString(result.block.total_difficulty))}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Gas Used</el-col>
-          <el-col class="value">{{thousands("" + hexToNumberString(result.block.gas_used))}}</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Gas Used')}}</el-col>
+          <el-col class="value">{{thousands("" + hexToNumberString(result.block.gas_used)/1000000000)}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Gas Limit</el-col>
-          <el-col class="value">{{thousands("" + hexToNumberString(result.block.gas_limit))}}</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Gas Limit')}}</el-col>
+          <el-col class="value">{{thousands("" + hexToNumberString(result.block.gas_limit)/1000000000)}}</el-col>
         </el-row>
 
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Nonce</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Nonce')}}</el-col>
           <el-col class="value">{{result.block.nonce}}</el-col>
         </el-row>
         <el-row class="item">
           <el-col class="title">
-            <div><img src="/images/info.png"></div>Extra Data</el-col>
-          <el-col class="value">{{toExtraData(result.block.extra_data)}}</el-col>
+            <div><img src="/images/info.png"></div>{{$t('Extra Data')}}</el-col>
+          <el-col class="value">{{(result.block.extra_data)}}</el-col>
         </el-row>
 
       </el-row>
       <el-row class="transactions" >
         <el-col class="inner">
           <el-row class="head">
-            <el-col class="title"><h2>Transactions</h2></el-col>
+            <el-col class="title"><h2>{{$t('Transactions')}}</h2></el-col>
           </el-row>
           <el-row v-for="item in result.transactions" :key="item.id" class="transaction">
             <el-col  style="padding-bottom: 15px;">
               <el-row v-bind:class="{body:true,contract:item.kind!==0}">
-                <el-col :class="{type:true,contract:item.kind!==0}">{{txType[item.kind]}}</el-col>
+                <el-col :class="{type:true,contract:item.kind!==0}">{{$t(txType[item.kind])}}</el-col>
                 <el-col class="content">
-                  <div class="hash">hash
+                  <div class="hash">{{$t('hash')}}
                     <router-link :to='"/tx?id=" + item.hash' >{{item.hash}}</router-link>
                   </div>
-                  <div class="operation">from 
+                  <div class="operation">{{$t('from')}} 
                     <router-link :to='"/addr?addr=" + item.from'>{{item.from}}</router-link><span v-if="item.kind !== 1"> → to </span><router-link :to='"/addr?addr=" + item.from'>{{item.to}}</router-link>
                   </div>
                   <div class="fee">{{thousands("" + toTokens(hexToNumberString(item.value)))}} YLEM</div>
                 </el-col>
                 <el-col class="block">
-                  <div class="num"><router-link to="#" >Block #{{thousands("" + item.block_number)}}</router-link></div>
+                  <div class="num"><router-link to="#" >{{$t('Block')}} #{{thousands("" + item.block_number)}}</router-link></div>
                   <div class="time">{{prettytime(item.timestamp)}} ago</div>
                 </el-col>
               </el-row>
@@ -128,9 +128,9 @@ export default {
   data(){
     return {
       txType:{
-        0: "Transaction",
+        0: "Transactions",
         1: "Contract Creation" ,
-        2: "Contract Call " ,
+        2: "Contract Call" ,
       },
       result:{
       },
@@ -143,13 +143,10 @@ export default {
     async getBlock(id,page){
       const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
       this.result = _data
-    },
-    async getTransactions(id,page){
-      const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
       this.result.transactions = _data.transactions
     },
     pageChange(page){
-      this.getTransactions(this.$route.query.id,page)
+      this.getBlock(this.$route.query.id,page)
     },
     thousands(s){
       try{
@@ -160,23 +157,25 @@ export default {
         return s
       }
     },
-    prettytime(timestamp){
-      let now = new Date().getTime()
-      now = Math.round(now/1000)
-      let span = now - timestamp
-      if (span <= 0) span=1
+      prettytime(timestamp) {
+      let now = new Date().getTime();
+      now = Math.round(now / 1000);
+      let span = now - timestamp;
+      if (span <= 0) span = 1;
 
-      let t = ""
-      if (span >= 3600) {
-        t = "1 hour"
-      } else if (span >= 60) {
-        t = "1 minute"
-      } else if (span == 1) {
-        t = "1 second"
-      } else {
-        t = "" + span + " seconds"
+      var days = parseInt(span / ( 60 * 60 * 24));
+      if (days > 0) {
+        return days==1?days+"day":days+"days";
       }
-      return t
+      var hours = parseInt((span % (60 * 60 * 24)) / ( 60 * 60));
+      if (hours > 0) {
+        return hours==1?hours+"h":hours+"hs";
+      }
+      var minutes = parseInt((span % ( 60 * 60)) / ( 60));
+      if (minutes > 0) {
+        return minutes==1?minutes+"min":minutes+"mins";
+      }
+      return span  + "s";
     },
     hexToNumberString(s) {
       if (s == '') { s = '0x'}

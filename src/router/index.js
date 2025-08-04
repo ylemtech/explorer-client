@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home.vue' 
 import Blocks from '../components/Blocks.vue' 
 import Transactions from '../components/Transactions.vue'  
+import Nfts from '../components/TransactionsNFT.vue' 
+import Nft from '../components/nft.vue' 
 import Block from '../components/Block.vue' 
 import Transaction from '../components/Transaction.vue' 
 import Address from '../components/Address.vue' 
@@ -28,6 +30,14 @@ const router = new VueRouter({
             component:Transactions
         },
         {
+            path:"/nfts",
+            component:Nfts
+        },
+        {
+            path:"/nft",
+            component:Nft
+        },
+        {
             path:"/block",
             component:Block
         },
@@ -45,7 +55,8 @@ const router = new VueRouter({
         {
             path:"/error",
             component:ErrorPage
-        },
+        }, 
+        
     ]
 })
 

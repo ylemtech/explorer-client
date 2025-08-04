@@ -3,15 +3,15 @@
     <el-main>
       <el-row class="detail">
         <el-row class="head">
-          <el-col class="title"><h2> NOT FOUND ！！！</h2></el-col>
+          <el-col class="title"><h2>{{$t(' NOT FOUND ！！！')}}</h2></el-col>
         </el-row>
         <el-row class="item">
           <el-row class="title">
             <!-- <div><img src="/images/error.png" /></div> -->
-            <div>The search string you entered was:</div>
+            <div>{{$t('The search string you entered was:')}}</div>
             <div style="color: #5f51ff">{{ this.text }}</div>
-            <div>Sorry! This is an invalid search string.</div>
-            <router-link class="back" to="/">Back Home</router-link>
+            <div>{{$t('Sorry! This is an invalid search string.')}}</div>
+            <router-link class="back" to="/">{{$t('Back Home')}}</router-link>
           </el-row>
         </el-row>
       </el-row>

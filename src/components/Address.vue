@@ -3,26 +3,26 @@
     <el-main>
       <el-row class="detail">
         <el-row class="head">
-          <el-col class="title"><h2>Overview</h2></el-col>
+          <el-col class="title"><h2>{{$t('Overview')}}</h2></el-col>
         </el-row>
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png" /></div>
-            Address</el-col
+            {{$t('Address')}}</el-col
           >
           <el-col class="value">{{ addr }}</el-col>
         </el-row>
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png" /></div>
-            Balance</el-col
+             {{$t('Balance')}}</el-col
           >
           <el-col class="value">{{ balance }} YLEM</el-col>
         </el-row>
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png" /></div>
-            Txn Count</el-col
+            {{$t('Txn Count')}}</el-col
           >
           <el-col class="value">{{ result.TransCount }}</el-col>
         </el-row>
@@ -30,7 +30,7 @@
       <el-row class="transactions">
         <el-col class="inner">
           <el-row class="head">
-            <el-col class="title"><h2>Transactions</h2></el-col>
+            <el-col class="title"><h2>{{$t('Transactions')}}</h2></el-col>
           </el-row>
           <el-row
             v-for="item in this.result2.transactions"
@@ -40,21 +40,21 @@
             <el-col style="padding-bottom: 15px">
               <el-row :class="{ body: true, contract: item.kind !== 0 }">
                 <el-col :class="{ type: true, contract: item.kind !== 0 }">{{
-                  txType[item.kind]
+                  $t(txType[item.kind])
                 }}</el-col>
                 <el-col class="content">
                   <div class="hash">
-                    hash
+                    {{$t('hash')}}
                     <router-link :to="'/tx?id=' + item.hash">{{ item.hash }}</router-link>
                   </div>
                   <div class="operation">
-                    from <router-link :to="'/addr?addr=' + item.from">{{ item.from }}</router-link
-                    ><span v-if="item.kind !== 1"> → to </span
+                    {{$t('from')}} <router-link :to="'/addr?addr=' + item.from">{{ item.from }}</router-link
+                    ><span v-if="item.kind !== 1"> → {{$t('to')}} </span
                     ><router-link :to="'/addr?addr=' + item.to">{{ item.to }}</router-link>
                   </div>
                   <div class="fee">
-                    <span class="tagIn" v-if="item.to == addr">IN</span>
-                    <span class="tagOut" v-else>OUT</span>
+                    <span class="tagIn" v-if="item.to == addr">{{$t('IN')}}</span>
+                    <span class="tagOut" v-else>{{$t('OUT')}}</span>
                     {{
                       thousands("" + toTokens(hexToNumberString(item.value)))
                     }}
@@ -64,7 +64,7 @@
                 <el-col class="block">
                   <div class="num">
                     <router-link :to="'/block?id=' + item.block_number"
-                      >Block #{{ thousands("" + item.block_number) }}</router-link
+                      >{{$t('Block')}} #{{ thousands("" + item.block_number) }}</router-link
                     >
                   </div>
                   <div class="time">{{ prettytime(item.timestamp) }} ago</div>
@@ -100,9 +100,9 @@ export default {
   data() {
     return {
       txType: {
-        0: "Transaction",
+        0: "Transactions",
         1: "Contract Creation",
-        2: "Contract Call ",
+        2: "Contract Call",
       },
       addr: "",
       page: 1,
@@ -161,23 +161,25 @@ export default {
         return s;
       }
     },
-    prettytime(timestamp) {
+      prettytime(timestamp) {
       let now = new Date().getTime();
       now = Math.round(now / 1000);
       let span = now - timestamp;
       if (span <= 0) span = 1;
 
-      let t = "";
-      if (span >= 3600) {
-        t = "1 hour";
-      } else if (span >= 60) {
-        t = "1 minute";
-      } else if (span == 1) {
-        t = "1 second";
-      } else {
-        t = "" + span + " seconds";
+      var days = parseInt(span / ( 60 * 60 * 24));
+      if (days > 0) {
+        return days==1?days+"day":days+" days";
       }
-      return t;
+      var hours = parseInt((span % (60 * 60 * 24)) / ( 60 * 60));
+      if (hours > 0) {
+        return hours==1?hours+"h":hours+"hs";
+      }
+      var minutes = parseInt((span % ( 60 * 60)) / ( 60));
+      if (minutes > 0) {
+        return minutes==1?minutes+"min":minutes+"mins";
+      }
+      return span  + "s";
     },
     hexToNumberString(s) {
       if (s == "") {

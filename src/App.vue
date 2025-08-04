@@ -24,7 +24,8 @@ export default {
   color: #2c3e50;
   margin: 0 5%;
 }
-body{
+body {
   margin:0;
+  min-width: 1200px;
 }
 </style>

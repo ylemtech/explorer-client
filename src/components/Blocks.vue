@@ -4,7 +4,7 @@
       <el-row class="blocks">
         <el-col class="inner">
           <el-row class="head">
-            <el-col class="title"><h2>Blocks</h2></el-col>
+            <el-col class="title"><h2>{{$t('Blocks')}}</h2></el-col>
           </el-row>
           <el-row v-for="item in result.blocks" :key="item.id" class="block">
             <el-col style="padding-bottom: 15px;">
@@ -15,15 +15,15 @@
                 </el-col>
                 <el-col class="content">
                   <div class="trancount">
-                    {{item.transactions_count}} transactions {{thousands("" + item.size)}} bytes {{prettytime(item.timestamp)}} ago
+                    {{item.transactions_count}} {{$t('transactions')}} {{thousands("" + item.size)}} {{$t('bytes')}} {{prettytime(item.timestamp)}} ago
                   </div>
                   <div class="operation">
-                    <span>Miner: </span><router-link :to='"/addr?addr=" + item.miner'>{{item.miner}}</router-link>
+                    <span>{{$t('Miner')}}: </span><router-link :to='"/addr?addr=" + item.miner'>{{item.miner}}</router-link>
                   </div>
                 </el-col>
                 <el-col class="gas">
-                  <div class="gas-limit">{{thousands(hexToNumberString(item.gas_limit))}} Gas Limit</div>
-                  <div class="gas-used">{{thousands(hexToNumberString(item.gas_used))}} Gas Used</div>
+                  <div class="gas-limit">{{thousands(hexToNumberString(item.gas_limit)/1000000000)}}  {{$t('Gas Limit')}}</div>
+                  <div class="gas-used">{{thousands(hexToNumberString(item.gas_used)/1000000000)}} {{$t('Gas Used')}}</div>
                 </el-col>
               </el-row>
             </el-col>
@@ -75,23 +75,25 @@ export default {
         return s
       }
     },
-    prettytime(timestamp){
-      let now = new Date().getTime()
-      now = Math.round(now/1000)
-      let span = now - timestamp
-      if (span <= 0) span=1
+       prettytime(timestamp) {
+      let now = new Date().getTime();
+      now = Math.round(now / 1000);
+      let span = now - timestamp;
+      if (span <= 0) span = 1;
 
-      let t = ""
-      if (span >= 3600) {
-        t = "1 hour"
-      } else if (span >= 60) {
-        t = "1 minute"
-      } else if (span == 1) {
-        t = "1 second"
-      } else {
-        t = "" + span + " seconds"
+      var days = parseInt(span / ( 60 * 60 * 24));
+      if (days > 0) {
+        return days==1?days+"day":days+"days";
       }
-      return t
+      var hours = parseInt((span % (60 * 60 * 24)) / ( 60 * 60));
+      if (hours > 0) {
+        return hours==1?hours+"h":hours+"hs";
+      }
+      var minutes = parseInt((span % ( 60 * 60)) / ( 60));
+      if (minutes > 0) {
+        return minutes==1?minutes+"min":minutes+"mins";
+      }
+      return span  + "s";
     },
     hexToNumberString(s) {
       if (s == '') { s = '0x'}
