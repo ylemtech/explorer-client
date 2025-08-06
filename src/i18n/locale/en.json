@@ -1,6 +1,8 @@
 {
       "YLEMSCAN": "YLEMSCAN",
       "Home": "Home",
+      "Transaction": "Transaction",
+      "NFTs": "NFTs",
       "input block or hash or address": "input block or hash or address",
       "Overview": "Overview",
       "Address": "Address",

@@ -6,7 +6,7 @@ import App from './App.vue'
 import i18n from './i18n/index'
 import filters from './components/filters'
 Object.keys(filters).forEach(key => {
-  Vue.filter(key, filters[key]) //注册全局filter；
+  Vue.filter(key, filters[key]) // Register global filter
 })
 Vue.use(ElementUI)
 // Vue.use(Filter)

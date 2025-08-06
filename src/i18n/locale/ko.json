@@ -1,6 +1,8 @@
 {
     "YLEMSCAN": "Youlemei 블록 브라우저",
     "Home": "첫 장",
+    "Transaction": "거래",
+    "NFTs": "NFTs",
     "input block or hash or address": "입력 블록/해시/주소",
     "Overview": "개요",
     "Address": "주소",

@@ -2,20 +2,14 @@
   "name": "blockexplorer",
   "productName": "Block Explorer",
   "version": "1.0.0",
-  "author": "NanJing BaiShiTong Co.",
-  "description": "Block Explorer for BaiST bockchain",
+  "author": "ylem",
+  "description": "Block Explorer for ylem",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "electron:buildwin": "vue-cli-service electron:build --win --x64",
-    "electron:serve": "vue-cli-service electron:serve",
-    "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "lint": "vue-cli-service lint"
   },
-  "main": "background.js",
   "dependencies": {
     "axios": "^1.2.0",
     "core-js": "^3.8.3",

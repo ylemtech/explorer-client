@@ -1,6 +1,6 @@
 import { utils } from "web3"
 /**
- * 格式化时间
+ * Format time
  *
  * @param {date} date
  * @param {string} format
@@ -18,7 +18,7 @@ export function formatTime(date, format = 'yyyy-MM-dd hh:mm:ss') {
     if (/^\d{10}$/.test(date)) {
       date = new Date(date * 1000)
     } else {
-      // ios 中使用 new Date( yyyy-MM-dd hh:mm:ss:SS ) 时间格式字符串不能精确到 小时以后
+      // Using the new Date (yyyy MM dd hh: mm: ss: SS) time format string in iOS cannot be precise beyond the hour
       var dateArr = date.split(/[- :]/)
       var now = new Date()
       date = new Date(dateArr[0] || now.getFullYear(), dateArr[1] && parseInt(dateArr[1]) ? parseInt(dateArr[1]) - 1 : (now.getMonth() - 1), dateArr[2] || 1, dateArr[3] || 0, dateArr[4] || 0, dateArr[5] || 0)
@@ -32,14 +32,14 @@ export function formatTime(date, format = 'yyyy-MM-dd hh:mm:ss') {
   if (format === 'timestamp') return +date
 
   var map = {
-    'M': date.getMonth() + 1, // 月份
-    'd': date.getDate(), // 日
-    'h': date.getHours(), // 小时
-    'm': date.getMinutes(), // 分
-    's': date.getSeconds(), // 秒
-    'q': Math.floor((date.getMonth() + 3) / 3), // 季度
-    'S': date.getMilliseconds(), // 毫秒
-    'W': '星期' + ['日', '一', '二', '三', '四', '五', '六'][date.getDay()] // 星期
+    'M': date.getMonth() + 1, // M
+    'd': date.getDate(), // d
+    'h': date.getHours(), // h
+    'm': date.getMinutes(), // m
+    's': date.getSeconds(), // s
+    'q': Math.floor((date.getMonth() + 3) / 3), // q
+    'S': date.getMilliseconds(), // S
+    'W': '星期' + ['日', '一', '二', '三', '四', '五', '六'][date.getDay()] // W
   }
   format = format.replace(/([yMdhmsqSW])+/g, function (all, t) {
     var v = map[t]
@@ -65,7 +65,7 @@ export let fulltime = (timestamp) => {
 }
 
 /*
- * 截断hash
+ * Truncate hash
  */
 export let filterHash = str => String(str).substr(0, 18) + '...' ;
 
@@ -145,14 +145,13 @@ export let addressDetail = (address) => {
 export let tradeHash = (hash) => {
   return `/tradeHash?hash=${hash}`
 }
-// 省略中间 x 位 为了方便记忆 展示后4位
+// Omitting the middle x bit for ease of memory and displaying the last 4 bits
 export let addressEll = (str) => {
-  // console.log("-----------------")
   if (!str) return ''
   return str.replace(/^(\w{10})(\w+)(\w{4})$/, '$1...$3')
 }
 
-// 校验地址是否包含中文
+// Verify if the address contains Chinese characters
 export let addressCN = (str) => {
   let valid = /.*[\u4e00-\u9fa5]+.*$/.test(str)
   return valid

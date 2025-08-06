@@ -1,6 +1,8 @@
 {
   "YLEMSCAN": "優樂美區塊瀏覽器",
   "Home": "首頁",
+  "NFTs": "NFTs",
+  "Transaction": "交易",
   "input block or hash or address": "輸入區塊/哈希/地址",
   "Overview": "概述",
   "Address": "地址",

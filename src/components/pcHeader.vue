@@ -55,7 +55,6 @@ export default {
       if (to.path == from.path) {
         console.log("加载同一页面");
         this.$nextTick(() => {
-          // 不加this.$nextTick时，路由跳转后还是上一次的数据，所以需要加上
           location.reload();
           if (to.path != "/" && to.path != "/blocks" && to.path != "/txs") {
             this.activeMenu = "4";
@@ -63,10 +62,8 @@ export default {
         });
       }
 
-      console.log("路由变化了");
       this.keyword = "";
-      // console.log('当前页面路由：' + to.path);
-      // console.log("上一个路由：" + from.path);
+
       if (to.path == "/") {
         this.activeMenu = "1";
       } else if (to.path == "/blocks") {
@@ -75,7 +72,6 @@ export default {
         this.activeMenu = "3";
       } else {
         this.activeMenu = "4";
-        console.log("wwwwwwwwwwwww");
       }
     },
   },
@@ -87,7 +83,7 @@ export default {
         if (this.keyword == "") return;
         if (reg.test(this.keyword) || this.keyword == 0) {
           console.log("search block");
-          //判断两个高度差---int类型比较
+          // Compare two height differences - int type
           axios.get("/api/v1/block?id=" + this.keyword).then((data) => {
             if (data.data != null) {
               this.$router.push({
@@ -107,7 +103,7 @@ export default {
               e === 64 && !this.keyword.startsWith("0x")
                 ? "0x" + this.keyword
                 : this.keyword;
-            //交易的哈希值---地址64位字节加上16进制标示0x(共66位)
+            // The hash value of the transaction - address 64 bytes plus hexadecimal identifier 0x (a total of 66 bits)
             axios
               .get("/api/v1/tx?id=" + this.keyword)
               .then((data) => {
@@ -126,8 +122,8 @@ export default {
                 this.showErrorPage();
               });
           } else if (e === 40 || e === 42) {
-            console.log("search addr");
-            //地址
+            // console.log("search addr");
+            
             axios
               .get("/api/v1/transaction/balance?miner=" + this.keyword)
               .then((data) => {
@@ -147,7 +143,7 @@ export default {
           }
         }
       } catch (e) {
-        console.log("异常");
+        console.log("error");
         this.showErrorPage();
       }
     },

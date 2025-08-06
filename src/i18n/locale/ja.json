@@ -1,6 +1,8 @@
 {
     "YLEMSCAN": "Youlemei ブロック ブラウザ",
     "Home": "表紙",
+    "Transaction": "取り引き",
+    "NFTs": "NFTs",
     "input block or hash or address": "入力ブロック/ハッシュ/アドレス",
     "Overview": "概要",
     "Address": "住所",

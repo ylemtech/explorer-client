@@ -315,6 +315,15 @@ export default {
   border-radius: 6px 6px 0px 0px;
   float: left;
 }
+.total .block:first-child {
+  max-width: 25%;
+  padding: 20px;
+  margin-left: 0;
+  line-height: 30px;
+  background: #1b174d;
+  border-radius: 6px 6px 0px 0px;
+  float: left;
+}
 
 .total .block .container {
   /* border-left: 4px solid #4ad7a7; */

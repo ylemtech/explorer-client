@@ -1,6 +1,8 @@
 {
     "YLEMSCAN": "优乐美区块浏览器",
     "Home": "首页",
+    "Transaction": "交易",
+    "NFTs": "NFTs",
     "input block or hash or address": "输入区块/哈希/地址",
     "Overview": "概述",
     "Address": "地址",
