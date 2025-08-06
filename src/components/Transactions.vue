@@ -22,16 +22,16 @@
                 <el-col class="content">
                   <div class="hash">
                     {{ $t("hash") }}
-                    <router-link :to="'/tx?id=' + item.hash">{{
+                    <router-link :to="'/tx/' + item.hash">{{
                       item.hash
                     }}</router-link>
                   </div>
                   <div class="operation">
                     {{ $t("from") }}
-                    <router-link :to="'/addr?addr=' + item.from">
+                    <router-link :to="'/addr/' + item.from">
                       {{ item.from }}</router-link
                     ><span v-if="item.kind !== 1"> → {{ $t("to") }} </span
-                    ><router-link :to="'/addr?addr=' + item.to">{{
+                    ><router-link :to="'/addr/' + item.to">{{
                       item.to 
                     }}</router-link>
                   </div>
@@ -47,7 +47,7 @@
                   <img :src="item.imageUri" alt="" class="nftImg" /></el-col> -->
                 <el-col class="block">
                   <div class="num">
-                    <router-link :to="'/block?id=' + item.block_number"
+                    <router-link :to="'/block/' + item.block_number"
                       >{{ $t("Block") }} #{{
                         thousands("" + item.block_number)
                       }}</router-link

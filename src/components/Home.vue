@@ -63,7 +63,7 @@
             class="container"
           >
             <div class="content">
-              <router-link class="number" :to="'/block?id=' + item.id"
+              <router-link class="number" :to="'/block/' + item.id"
                 >#{{ thousands("" + item.id) }}</router-link
               >
               <div class="panel">
@@ -73,7 +73,7 @@
                 </div>
                 <div class="desc">
                   <span class="title">{{$t('Miner')}}</span>
-                  <router-link class="miner" :to="'/addr?addr=' + item.miner">{{
+                  <router-link class="miner" :to="'/addr/' + item.miner">{{
                     item.miner
                   }}</router-link>
                 </div>
@@ -110,17 +110,17 @@
                 <el-col class="content">
                   <div class="hash">
                     {{$t('hash')}}
-                    <router-link :to="'/tx?id=' + item.hash">{{
+                    <router-link :to="'/tx/' + item.hash">{{
                       item.hash
                     }}</router-link>
                   </div>
                   <div class="operation">
                     {{$t('from')}}
-                    <router-link :to="'/addr?addr=' + item.from">{{
+                    <router-link :to="'/addr/' + item.from">{{
                       item.from | addressEll
                     }}</router-link
                     ><span v-if="item.kind !== 1"> → {{$t('to')}} </span
-                    ><router-link :to="'/addr?addr=' + item.to">{{
+                    ><router-link :to="'/addr/' + item.to">{{
                       item.to | addressEll
                     }}</router-link>
                   </div>
@@ -133,7 +133,7 @@
                 </el-col>
                 <el-col class="block">
                   <div class="num">
-                    <router-link :to="'/block?id=' + item.block_number"
+                    <router-link :to="'/block/' + item.block_number"
                       >{{$t('Block')}} #{{
                         thousands("" + item.block_number)
                       }}</router-link
@@ -218,7 +218,7 @@ export default {
       this.$router.push({ path: "/txs" });
     },
     viewBlock(id) {
-      this.$router.push({ path: "/block?id=" + id });
+      this.$router.push('/block/' + id);
     },
     thousands(s) {
       try {

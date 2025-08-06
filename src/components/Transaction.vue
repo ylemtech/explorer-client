@@ -31,7 +31,7 @@
             {{ $t("Block") }}</el-col
           >
           <el-col class="value"
-            ><router-link :to="'/block?id=' + result.transaction.block_number"
+            ><router-link :to="'/block/' + result.transaction.block_number"
               >#{{
                 thousands("" + result.transaction.block_number)
               }}</router-link
@@ -55,7 +55,7 @@
             {{ $t("From") }}</el-col
           >
           <el-col class="value"
-            ><router-link :to="'/addr?addr=' + result.transaction.from">{{
+            ><router-link :to="'/addr/' + result.transaction.from">{{
               result.transaction.from
             }}</router-link></el-col
           >
@@ -67,7 +67,7 @@
             {{ $t("To") }}</el-col
           >
           <el-col class="value"
-            ><router-link :to="'/addr?addr=' + result.transaction.from">{{
+            ><router-link :to="'/addr/' + result.transaction.from">{{
               result.transaction.to
             }}</router-link></el-col
           >
@@ -193,7 +193,7 @@ export default {
     // });
     // console.log(file);
     // FileSaver.saveAs(blob, "jiedao_8hou.json");
-    this.getTransaction(this.$route.query.id);
+    this.getTransaction(this.$route.params.id);
   },
   methods: {
    
@@ -207,7 +207,7 @@ export default {
          this.result.transaction.imageUri = str2;
     },
     pageChange(page) {
-      this.getTransactions(this.$route.query.id, page);
+      this.getTransactions(this.$route.params.id, page);
     },
       showNFT(item) {
       if(item.method == "mint"||item.method == "burn"||item.method == "safeTransferFrom"||item.method == "transferFrom"){

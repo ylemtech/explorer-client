@@ -45,12 +45,12 @@
                 <el-col class="content">
                   <div class="hash">
                     {{$t('hash')}}
-                    <router-link :to="'/tx?id=' + item.hash">{{ item.hash }}</router-link>
+                    <router-link :to="'/tx/' + item.hash">{{ item.hash }}</router-link>
                   </div>
                   <div class="operation">
-                    {{$t('from')}} <router-link :to="'/addr?addr=' + item.from">{{ item.from }}</router-link
+                    {{$t('from')}} <router-link :to="'/addr/' + item.from">{{ item.from }}</router-link
                     ><span v-if="item.kind !== 1"> → {{$t('to')}} </span
-                    ><router-link :to="'/addr?addr=' + item.to">{{ item.to }}</router-link>
+                    ><router-link :to="'/addr/' + item.to">{{ item.to }}</router-link>
                   </div>
                   <div class="fee">
                     <span class="tagIn" v-if="item.to == addr">{{$t('IN')}}</span>
@@ -63,7 +63,7 @@
                 </el-col>
                 <el-col class="block">
                   <div class="num">
-                    <router-link :to="'/block?id=' + item.block_number"
+                    <router-link :to="'/block/' + item.block_number"
                       >{{$t('Block')}} #{{ thousands("" + item.block_number) }}</router-link
                     >
                   </div>
@@ -128,7 +128,7 @@ export default {
     console.log("activated")
   },
   beforeMount() {
-    this.addr = this.$route.query.addr;
+    this.addr = this.$route.params.addr;
     this.getBalance(this.addr);
     this.getTransactions(this.addr, this.page);
   },
@@ -150,7 +150,7 @@ export default {
       this.result2 = _data;
     },
     pageChange(page) {
-      this.getTransactions(this.$route.query.addr, page);
+      this.getTransactions(this.$route.params.addr, page);
     },
     thousands(s) {
       try {

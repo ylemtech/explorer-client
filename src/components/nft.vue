@@ -48,7 +48,7 @@
               >
               <el-col class="value"
                 ><router-link
-                  :to="'/block?id=' + result.transaction.block_number"
+                  :to="'/block/' + result.transaction.block_number"
                   >#{{
                     thousands("" + result.transaction.block_number)
                   }}</router-link
@@ -233,7 +233,7 @@ export default {
     // });
     // console.log(file);
     // FileSaver.saveAs(blob, "jiedao_8hou.json");
-    this.getTransaction(this.$route.query.id);
+    this.getTransaction(this.$route.params.id);
   },
   methods: {
     async getTransaction(id) {

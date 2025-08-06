@@ -86,10 +86,8 @@ export default {
           // Compare two height differences - int type
           axios.get("/api/v1/block?id=" + this.keyword).then((data) => {
             if (data.data != null) {
-              this.$router.push({
-                path: "/block",
-                query: { id: this.keyword },
-              });
+              this.$router.push('/block/' + this.keyword );
+
               this.keyword = "";
             } else {
               this.showErrorPage();
@@ -109,10 +107,7 @@ export default {
               .then((data) => {
                 console.log("res=", data);
                 if (data.data != null) {
-                  this.$router.push({
-                    path: "/tx",
-                    query: { id: this.keyword },
-                  });
+                  this.$router.push('/tx/' + this.keyword );
                 } else {
                   this.showErrorPage();
                 }
@@ -128,10 +123,8 @@ export default {
               .get("/api/v1/transaction/balance?miner=" + this.keyword)
               .then((data) => {
                 if (data.data != null) {
-                  this.$router.push({
-                    path: "/addr",
-                    query: { addr: this.keyword },
-                  });
+                  this.$router.push('/addr/' + this.keyword );
+
                   this.keyword = "";
                 } else {
                   this.showErrorPage();
