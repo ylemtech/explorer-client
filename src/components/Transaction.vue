@@ -55,7 +55,7 @@
             {{ $t("From") }}</el-col
           >
           <el-col class="value"
-            ><router-link :to="'/addr/' + result.transaction.from">{{
+            ><router-link :to="'/address/' + result.transaction.from">{{
               result.transaction.from
             }}</router-link></el-col
           >
@@ -67,7 +67,7 @@
             {{ $t("To") }}</el-col
           >
           <el-col class="value"
-            ><router-link :to="'/addr/' + result.transaction.from">{{
+            ><router-link :to="'/address/' + result.transaction.from">{{
               result.transaction.to
             }}</router-link></el-col
           >

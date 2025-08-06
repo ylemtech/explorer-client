@@ -45,7 +45,7 @@ const router = new VueRouter({
             component: Transaction
         },
         {
-            path: "/addr/:addr",
+            path: "/address/:address",
             component: Address,
             meta: {
                 keepAlive: false

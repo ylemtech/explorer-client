@@ -123,7 +123,7 @@ export default {
               .get("/api/v1/transaction/balance?miner=" + this.keyword)
               .then((data) => {
                 if (data.data != null) {
-                  this.$router.push('/addr/' + this.keyword );
+                  this.$router.push('/address/' + this.keyword );
 
                   this.keyword = "";
                 } else {

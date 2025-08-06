@@ -26,7 +26,7 @@
         <el-row class="item">
           <el-col class="title">
             <div><img src="/images/info.png"></div>{{$t('Miner')}}</el-col>
-          <el-col class="value"><router-link :to='"/addr/" + result.block.miner'>{{result.block.miner}}</router-link></el-col>
+          <el-col class="value"><router-link :to='"/address/" + result.block.miner'>{{result.block.miner}}</router-link></el-col>
         </el-row>
 
         <el-row class="item">
@@ -97,7 +97,7 @@
                     <router-link :to='"/tx/" + item.hash' >{{item.hash}}</router-link>
                   </div>
                   <div class="operation">{{$t('from')}} 
-                    <router-link :to='"/addr/" + item.from'>{{item.from}}</router-link><span v-if="item.kind !== 1"> → to </span><router-link :to='"/addr/" + item.from'>{{item.to}}</router-link>
+                    <router-link :to='"/address/" + item.from'>{{item.from}}</router-link><span v-if="item.kind !== 1"> → to </span><router-link :to='"/address/" + item.from'>{{item.to}}</router-link>
                   </div>
                   <div class="fee">{{thousands("" + toTokens(hexToNumberString(item.value)))}} YLEM</div>
                 </el-col>

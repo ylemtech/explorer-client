@@ -28,10 +28,10 @@
                   </div>
                   <div class="operation">
                     {{ $t("from") }}
-                    <router-link :to="'/addr/' + item.from">
+                    <router-link :to="'/address/' + item.from">
                       {{ item.from }}</router-link
                     ><span v-if="item.kind !== 1"> → {{ $t("to") }} </span
-                    ><router-link :to="'/addr/' + item.to">{{
+                    ><router-link :to="'/address/' + item.to">{{
                       item.to 
                     }}</router-link>
                   </div>

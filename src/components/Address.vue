@@ -48,9 +48,9 @@
                     <router-link :to="'/tx/' + item.hash">{{ item.hash }}</router-link>
                   </div>
                   <div class="operation">
-                    {{$t('from')}} <router-link :to="'/addr/' + item.from">{{ item.from }}</router-link
+                    {{$t('from')}} <router-link :to="'/address/' + item.from">{{ item.from }}</router-link
                     ><span v-if="item.kind !== 1"> → {{$t('to')}} </span
-                    ><router-link :to="'/addr/' + item.to">{{ item.to }}</router-link>
+                    ><router-link :to="'/address/' + item.to">{{ item.to }}</router-link>
                   </div>
                   <div class="fee">
                     <span class="tagIn" v-if="item.to == addr">{{$t('IN')}}</span>
@@ -104,7 +104,7 @@ export default {
         1: "Contract Creation",
         2: "Contract Call",
       },
-      addr: "",
+      address: "",
       page: 1,
       balance: 0,
       result: {
@@ -128,7 +128,7 @@ export default {
     console.log("activated")
   },
   beforeMount() {
-    this.addr = this.$route.params.addr;
+    this.addr = this.$route.params.address;
     this.getBalance(this.addr);
     this.getTransactions(this.addr, this.page);
   },
@@ -150,7 +150,7 @@ export default {
       this.result2 = _data;
     },
     pageChange(page) {
-      this.getTransactions(this.$route.params.addr, page);
+      this.getTransactions(this.$route.params.address, page);
     },
     thousands(s) {
       try {

@@ -18,7 +18,7 @@
                     {{item.transactions_count}} {{$t('transactions')}} {{thousands("" + item.size)}} {{$t('bytes')}} {{prettytime(item.timestamp)}} ago
                   </div>
                   <div class="operation">
-                    <span>{{$t('Miner')}}: </span><router-link :to='"/addr/" + item.miner'>{{item.miner}}</router-link>
+                    <span>{{$t('Miner')}}: </span><router-link :to='"/address/" + item.miner'>{{item.miner}}</router-link>
                   </div>
                 </el-col>
                 <el-col class="gas">
