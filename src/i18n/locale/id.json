@@ -53,5 +53,6 @@
     "Gas Limit": "Batas Gas",
     "Transaction Fee": "Biaya transaksi",
     "Gas Price": "Harga Gas",
-    "bytes": "byte"
+    "bytes": "byte",
+    "Invalid Address": "Alamat Tidak Valid"
 }

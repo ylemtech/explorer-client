@@ -53,5 +53,6 @@
       "Gas Limit": "Gas Limit",
       "Transaction Fee": "Transaction Fee",
       "Gas Price": "Gas Price",
-      "bytes": "bytes"
+      "bytes": "bytes",
+      "Invalid Address": "Invalid Address"
 }

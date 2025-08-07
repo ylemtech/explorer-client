@@ -53,5 +53,6 @@
   "Gas Limit": "燃料限制",
   "Transaction Fee": "手續費",
   "Gas Price": "燃料價格",
-  "bytes": "字節"
+  "bytes": "字節",
+  "Invalid Address": "無效的地址"
 }

@@ -53,5 +53,6 @@
     "Gas Limit": "燃料限制",
     "Transaction Fee": "手续费",
     "Gas Price": "燃料价格",
-    "bytes": "字节"
+    "bytes": "字节",
+    "Invalid Address": "无效地址"
 }

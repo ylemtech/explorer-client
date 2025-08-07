@@ -53,5 +53,6 @@
     "Gas Limit": "ガスリミット",
     "Transaction Fee": "取引手数料",
     "Gas Price": "ガス価格",
-    "bytes": "バイト"
+    "bytes": "バイト",
+    "Invalid Address": "無効なアドレス"
 }

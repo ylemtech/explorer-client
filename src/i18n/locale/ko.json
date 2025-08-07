@@ -53,5 +53,6 @@
     "Gas Limit": "가스 한도",
     "Transaction Fee": "거래 수수료",
     "Gas Price": "가스 가격",
-    "bytes": "바이트"
+    "bytes": "바이트",
+    "Invalid Address": "유효하지 않은 주소"
 }
