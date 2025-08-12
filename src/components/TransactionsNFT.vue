@@ -73,7 +73,7 @@
                     </div>
                     <!-- <router-link :to="'/nft?id=' + result.transaction.hash"> -->
                     <router-link
-                      :to="'/nft?id=' + item.hash"
+                      :to="'/nft/' + item.hash"
                       class="bottom-box"
                       v-if="showNFT(item)"
                     >
@@ -161,7 +161,7 @@ export default {
   methods: {
     async getTransations(page) {
       const { data: _data } = await axios.get(
-        "/api/v1/txs?page=" + page + "&type=3"
+        localStorage.getItem("chainApi") + "/api/v1/txs?page=" + page + "&type=3"
       );
       _data.transactions.forEach((element) => {
         var str = element.imageUri;

@@ -133,7 +133,7 @@
                 <span style="color:#7e74ec">{{result.transaction.sender| addressEll}}
                 </span>&nbsp; → &nbsp;<span style="color:#7e74ec">{{result.transaction.receiver| addressEll}}</span>
                 </div>
-              <router-link :to="'/nft?id=' + result.transaction.hash">
+              <router-link :to="'/nft/' + result.transaction.hash">
                <img :src="result.transaction.imageUri" alt="" class="nft-image"/>
                <img v-if="!result.transaction.imageUri" :src="placeholder" alt="" class="nft-image" />      
               </router-link> 
@@ -198,7 +198,7 @@ export default {
   methods: {
    
     async getTransaction(id) {
-      const { data: _data } = await axios.get("/api/v1/tx?id=" + id);
+      const { data: _data } = await axios.get(localStorage.getItem("chainApi") + "/api/v1/tx?id=" + id);
       this.result = _data;
        var str = _data.transaction.imageUri;
         // let str2 = str.replace('https://ipfs.io/ipfs/', 'https://nftstorage.link/ipfs/')

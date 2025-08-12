@@ -4,7 +4,6 @@ module.exports = defineConfig({
 })
 
 module.exports = {
-  // 代理
   devServer: {
     proxy: {
       '/root': {

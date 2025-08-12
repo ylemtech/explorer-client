@@ -60,7 +60,7 @@ export default {
 
   methods:{
     async getTransations(page){
-      const {data:_data} = await axios.get('/api/v1/blocks?page=' + page)
+      const {data:_data} = await axios.get(localStorage.getItem("chainApi") + '/api/v1/blocks?page=' + page)
       this.result = _data
     },
     pageChange(page){

@@ -150,7 +150,7 @@ export default {
   methods: {
     async getBalance(addr) {
       const { data: _data } = await axios.get(
-        "/api/v1/transaction/balance?miner=" + addr
+        localStorage.getItem("chainApi") + "/api/v1/transaction/balance?miner=" + addr
       );
       this.result = _data;
       this.balance = (
@@ -160,7 +160,7 @@ export default {
     },
     async getTransactions(addr, page) {
       const { data: _data } = await axios.get(
-        "/api/v1/transaction/miner?miner=" + addr + "&page=" + page
+        localStorage.getItem("chainApi") + "/api/v1/transaction/miner?miner=" + addr + "&page=" + page
       );
       this.result2 = _data;
     },

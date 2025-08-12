@@ -141,7 +141,7 @@ export default {
   },
   methods:{
     async getBlock(id,page){
-      const {data:_data} = await axios.get('/api/v1/block?id=' + id + "&page=" + page)
+      const {data:_data} = await axios.get(localStorage.getItem("chainApi") + '/api/v1/block?id=' + id + "&page=" + page)
       this.result = _data
       this.result.transactions = _data.transactions
     },

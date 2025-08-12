@@ -2,10 +2,29 @@
   <el-container>
     <el-main>
       <el-row class="header">
-        <el-col class="container" onclick="window.open('/','_self')">
-          <img src="/images/logo.png" class="logo" />
-          <span class="title">{{ $t("YLEMSCAN") }}</span>
+        <el-col class="container">
+          <img
+            src="/images/logo.png"
+            class="logo"
+            onclick="window.open('/','_self')"
+          />
+          <span class="title" onclick="window.open('/','_self')">{{$t("YLEMSCAN")}}</span>
+
+          <el-dropdown class="chain" trigger="click" @command="handleChain">
+            <span class="el-dropdown-link">
+              <el-tag  size="small">{{ chainType }}</el-tag>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="(item, key) in chain"
+                :key="item.id"
+                :command="item"
+                >{{ key }}</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
         </el-col>
+
         <el-col class="menu">
           <el-menu
             :default-active="activeMenu"
@@ -19,6 +38,7 @@
             <el-menu-item index="4">{{ $t("NFTs") }}</el-menu-item>
           </el-menu>
         </el-col>
+
         <el-col class="search">
           <el-input
             maxlength="66"
@@ -28,12 +48,18 @@
             @change="search()"
           ></el-input>
         </el-col>
+
         <el-dropdown class="lang" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img src="/images/lang.png" alt="">
+            <img src="/images/lang.png" alt="" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item,key) in lang"  :key="item.id" :command="item">{{key}}</el-dropdown-item>
+            <el-dropdown-item
+              v-for="(item, key) in lang"
+              :key="item.id"
+              :command="item"
+              >{{ key }}</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </el-row>
@@ -47,20 +73,33 @@ export default {
     return {
       activeMenu: "1",
       keyword: "",
-      lang:{"English":"en-US","中文（简体）":"zh-CN","中文（繁体）":"zh-HK","한국인（KR）":"ko-KR","日本語（JP）":"ja-JP","Indonesia（ID）":"en-US"}
+      lang: {
+        English: "en-US",
+        "中文（简体）": "zh-CN",
+        "中文（繁体）": "zh-HK",
+        "한국인（KR）": "ko-KR",
+        "日本語（JP）": "ja-JP",
+        "Indonesia（ID）": "en-US",
+      },
+      chain: {
+        Mainnet: "Mainnet",
+        Testnet: "Testnet",
+      },
+      chainType: "Mainnet",
+      chainApi: ""
     };
   },
   watch: {
-    $route(to, from) {
-      if (to.path == from.path) {
-        console.log("加载同一页面");
-        this.$nextTick(() => {
-          location.reload();
-          if (to.path != "/" && to.path != "/blocks" && to.path != "/txs") {
-            this.activeMenu = "4";
-          }
-        });
-      }
+    $route(to) {
+      // if (to.path == from.path) {
+      //   console.log("Load the same page");
+      //   this.$nextTick(() => {
+      //     location.reload();
+      //     if (to.path != "/" && to.path != "/blocks" && to.path != "/txs") {
+      //       this.activeMenu = "4";
+      //     }
+      //   });
+      // }
 
       this.keyword = "";
 
@@ -73,7 +112,28 @@ export default {
       } else {
         this.activeMenu = "4";
       }
+
+      localStorage.setItem("activeMenu", this.activeMenu);
     },
+  },
+  mounted() {
+    this.activeMenu = localStorage.getItem("activeMenu");
+    if (this.activeMenu == null) {
+      this.activeMenu = "1";
+    }
+  },
+  beforeMount() { 
+    this.chainType = localStorage.getItem("chainType");
+    this.chainApi = localStorage.getItem("chainApi");
+    if (this.chainType == null || this.chainType == "Mainnet") {
+      this.chainType = "Mainnet";
+      this.chainApi = "";
+      // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/root"
+    }else if(this.chainType == "Testnet") {
+      this.chainApi = "/test";
+      // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/test" 
+    }
+    localStorage.setItem("chainApi", this.chainApi);
   },
   methods: {
     search() {
@@ -84,9 +144,9 @@ export default {
         if (reg.test(this.keyword) || this.keyword == 0) {
           console.log("search block");
           // Compare two height differences - int type
-          axios.get("/api/v1/block?id=" + this.keyword).then((data) => {
+          axios.get(localStorage.getItem("chainApi") + "/api/v1/block?id=" + this.keyword).then((data) => {
             if (data.data != null) {
-              this.$router.push('/block/' + this.keyword );
+              this.$router.push("/block/" + this.keyword);
 
               this.keyword = "";
             } else {
@@ -103,11 +163,11 @@ export default {
                 : this.keyword;
             // The hash value of the transaction - address 64 bytes plus hexadecimal identifier 0x (a total of 66 bits)
             axios
-              .get("/api/v1/tx?id=" + this.keyword)
+              .get(localStorage.getItem("chainApi") + "/api/v1/tx?id=" + this.keyword)
               .then((data) => {
                 console.log("res=", data);
                 if (data.data != null) {
-                  this.$router.push('/tx/' + this.keyword );
+                  this.$router.push("/tx/" + this.keyword);
                 } else {
                   this.showErrorPage();
                 }
@@ -118,12 +178,12 @@ export default {
               });
           } else if (e === 40 || e === 42) {
             // console.log("search addr");
-            
+
             axios
-              .get("/api/v1/transaction/balance?miner=" + this.keyword)
+              .get(localStorage.getItem("chainApi") +  "/api/v1/transaction/balance?miner=" + this.keyword)
               .then((data) => {
                 if (data.data != null) {
-                  this.$router.push('/address/' + this.keyword );
+                  this.$router.push("/address/" + this.keyword);
 
                   this.keyword = "";
                 } else {
@@ -157,14 +217,34 @@ export default {
       }
       if (index == "3") {
         this.$router.push("/txs");
-      } if (index == "4") {
+      }
+      if (index == "4") {
         this.$router.push("/nfts");
       }
+
+      localStorage.setItem("activeMenu", index);
     },
-     handleCommand(command) {
-       console.log('click on item ' + command);
-       this.$i18n.locale = command;
-     }
+    handleCommand(command) {
+      console.log("click on item " + command);
+      this.$i18n.locale = command;
+    },
+    handleChain(chain) {
+      console.log("click on item " + chain);
+      this.chainType = chain;
+      if(this.chainType == "Mainnet") {
+        this.chainApi = ""
+        // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/root"
+      }else if(this.chainType == "Testnet") {
+        this.chainApi = "/test"
+        // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/test"
+      }
+      localStorage.setItem("chainType", this.chainType);
+      localStorage.setItem("chainApi", this.chainApi);
+
+      localStorage.setItem("activeMenu", "1");
+
+      window.open('/','_self');
+    },
   },
 };
 </script>
@@ -178,7 +258,7 @@ export default {
 }
 .header {
   display: flex;
-  justify-content:  space-between;;
+  justify-content: space-between;
   height: 80px;
   padding: 0 50px;
 }
@@ -189,7 +269,10 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
   width: 20%;
-  min-width: 180px;
+  min-width: 210px;
+}
+.header .chain {
+  margin: 8px 0 0 10px;
 }
 .header .menu {
   white-space: nowrap;
@@ -220,18 +303,18 @@ export default {
 }
 .el-dropdown {
   height: 30px;
-    vertical-align: top;
-  }
- .el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
-    .el-dropdown + .el-dropdown {
-    margin-left: 1px;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+  vertical-align: top;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 1px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 .el-menu--horizontal > .el-menu-item.is-active {
   border-bottom: 2px solid #7e74ec;
   color: #303133;

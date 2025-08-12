@@ -208,7 +208,7 @@ export default {
 
   methods: {
     async getBlock() {
-      const { data: _data } = await axios.get("/api/v1/bc");
+      const { data: _data } = await axios.get(localStorage.getItem("chainApi") + "/api/v1/bc");
       this.result = _data;
     },
     viewBlocks() {

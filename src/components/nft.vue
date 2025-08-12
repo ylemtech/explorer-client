@@ -237,7 +237,7 @@ export default {
   },
   methods: {
     async getTransaction(id) {
-      const { data: _data } = await axios.get("/api/v1/tx?id=" + id);
+      const { data: _data } = await axios.get(localStorage.getItem("chainApi") + "/api/v1/tx?id=" + id);
       this.result = _data.transaction;
         var str = _data.transaction.imageUri;
         // let str2 = str.replace('https://ipfs.io/ipfs/', 'https://nftstorage.link/ipfs/')
