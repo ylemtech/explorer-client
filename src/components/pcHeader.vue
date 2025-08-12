@@ -90,16 +90,13 @@ export default {
     };
   },
   watch: {
-    $route(to) {
-      // if (to.path == from.path) {
-      //   console.log("Load the same page");
-      //   this.$nextTick(() => {
-      //     location.reload();
-      //     if (to.path != "/" && to.path != "/blocks" && to.path != "/txs") {
-      //       this.activeMenu = "4";
-      //     }
-      //   });
-      // }
+    $route(to, from) {
+      if (to.path != from.path) {
+        console.log("Load the same page, transmitting different parameters, reloading");
+        this.$nextTick(() => {
+          location.reload();
+        });
+      }
 
       this.keyword = "";
 
