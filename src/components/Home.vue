@@ -7,7 +7,7 @@
             <el-col class="block">
               <div class="container">
                 <div class="title">{{$t('BLOCK HEIGHT')}}</div>
-                <div class="value">
+                <div class="value" v-if="result.block_height">
                   {{ thousands("" + result.block_height) }}
                 </div>
               </div>
@@ -15,13 +15,13 @@
             <el-col class="block">
               <div class="container">
                 <div class="title">{{$t('AVERAGE BLOCK TIME')}}</div>
-                <div class="value">{{ result.block_time }} Seconds</div>
+                <div class="value" v-if="result.block_time">{{ result.block_time }} Seconds</div>
               </div>
             </el-col>
             <el-col class="block">
               <div class="container">
                 <div class="title">{{$t('TOTAL TRANSACTIONS')}}</div>
-                <div class="value">
+                <div class="value" v-if="result.total_transactions">
                   {{ thousands("" + result.total_transactions) }}
                 </div>
               </div>
@@ -29,7 +29,7 @@
             <el-col class="block">
               <div class="container">
                 <div class="title">{{$t('TOTAL DIFFICULTY')}}</div>
-                <div class="value">
+                <div class="value" v-if="result.total_difficulty">
                   {{
                     thousands("" + hexToNumberString(result.total_difficulty))
                   }}
@@ -167,24 +167,24 @@ export default {
         2: "Contract Call",
       },
       result: {
-        block_height: 1,
-        total_difficulty: "0x1488",
-        total_transactions: 1,
-        block_time: 10,
-        blocks: [
-          { id: 1, timestamp: 0 },
-          { id: 0, timestamp: 0 },
-        ],
-        transactions: [
-          {
-            block_number: "1",
-            value: "0x",
-            kind: 0,
-            from: "0x00000000000000000000000000000000",
-            to: "0x00000000000000000000000000000000",
-            hash: "0x00000000000000000000000000000000",
-          },
-        ],
+        // block_height: '',
+        // total_difficulty: '',
+        // total_transactions: '',
+        // block_time: null,
+        // blocks: [
+        //   { id: 1, timestamp: 0 },
+        //   { id: 0, timestamp: 0 },
+        // ],
+        // transactions: [
+        //   {
+        //     block_number: "1",
+        //     value: "0x",
+        //     kind: 0,
+        //     from: "0x00000000000000000000000000000000",
+        //     to: "0x00000000000000000000000000000000",
+        //     hash: "0x00000000000000000000000000000000",
+        //   },
+        // ],
       },
     };
   },

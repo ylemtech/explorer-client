@@ -9,6 +9,7 @@
               :src="result.imageUri"
               alt=""
               class="nft-image"
+              onerror="this.src='/images/NFT.png'"
             />
             <img v-else :src="placeholder" alt="" class="nft-image" />
           </div>

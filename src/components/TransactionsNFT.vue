@@ -86,6 +86,7 @@
                       <img
                         v-if="item.imageUri"
                         :src="item.imageUri || placeholder"
+                        onerror="this.src='/images/NFT.png'"
                         alt=""
                         class="nftImg"
                       />
