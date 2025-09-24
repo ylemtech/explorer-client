@@ -8,11 +8,13 @@
             class="logo"
             onclick="window.open('/','_self')"
           />
-          <span class="title" onclick="window.open('/','_self')">{{$t("YLEMSCAN")}}</span>
+          <span class="title" onclick="window.open('/','_self')">{{
+            $t("YLEMSCAN")
+          }}</span>
 
           <el-dropdown class="chain" trigger="click" @command="handleChain">
             <span class="el-dropdown-link">
-              <el-tag  size="small">{{ chainType }}</el-tag>
+              <el-tag size="small">{{ chainType }}</el-tag>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -86,13 +88,15 @@ export default {
         Testnet: "Testnet",
       },
       chainType: "Mainnet",
-      chainApi: ""
+      chainApi: "",
     };
   },
   watch: {
     $route(to, from) {
       if (to.path != from.path) {
-        console.log("Load the same page, transmitting different parameters, reloading");
+        console.log(
+          "Load the same page, transmitting different parameters, reloading"
+        );
         this.$nextTick(() => {
           location.reload();
         });
@@ -119,16 +123,16 @@ export default {
       this.activeMenu = "1";
     }
   },
-  beforeMount() { 
+  beforeMount() {
     this.chainType = localStorage.getItem("chainType");
     this.chainApi = localStorage.getItem("chainApi");
     if (this.chainType == null || this.chainType == "Mainnet") {
       this.chainType = "Mainnet";
       this.chainApi = "";
       // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/root"
-    }else if(this.chainType == "Testnet") {
+    } else if (this.chainType == "Testnet") {
       this.chainApi = "/test";
-      // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/test" 
+      // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/test"
     }
     localStorage.setItem("chainApi", this.chainApi);
   },
@@ -141,29 +145,47 @@ export default {
         if (reg.test(this.keyword) || this.keyword == 0) {
           console.log("search block");
           // Compare two height differences - int type
-          axios.get(localStorage.getItem("chainApi") + "/api/v1/block?id=" + this.keyword).then((data) => {
-            if (data.data != null) {
-              this.$router.push("/block/" + this.keyword);
+          axios
+            .get(
+              localStorage.getItem("chainApi") +
+                "/api/v1/block?id=" +
+                this.keyword
+            )
+            .then((data) => {
+              if (data.data != null) {
+                if (!data.data.block.hash) {
+                  return this.showErrorPage();
+                }
 
-              this.keyword = "";
-            } else {
-              this.showErrorPage();
-            }
-          });
+                this.$router.push("/block/" + this.keyword);
+
+                this.keyword = "";
+              } else {
+                this.showErrorPage();
+              }
+            });
         } else {
           let e = this.keyword.length;
           if (e === 66 || e === 64) {
-            console.log("search tx");
+            // console.log("search tx");
             this.keyword =
               e === 64 && !this.keyword.startsWith("0x")
                 ? "0x" + this.keyword
                 : this.keyword;
             // The hash value of the transaction - address 64 bytes plus hexadecimal identifier 0x (a total of 66 bits)
             axios
-              .get(localStorage.getItem("chainApi") + "/api/v1/tx?id=" + this.keyword)
+              .get(
+                localStorage.getItem("chainApi") +
+                  "/api/v1/tx?id=" +
+                  this.keyword
+              )
               .then((data) => {
                 console.log("res=", data);
                 if (data.data != null) {
+                  if (!data.data.transaction.hash) {
+                    return this.showErrorPage();
+                  }
+
                   this.$router.push("/tx/" + this.keyword);
                 } else {
                   this.showErrorPage();
@@ -177,7 +199,11 @@ export default {
             // console.log("search addr");
 
             axios
-              .get(localStorage.getItem("chainApi") +  "/api/v1/transaction/balance?miner=" + this.keyword)
+              .get(
+                localStorage.getItem("chainApi") +
+                  "/api/v1/transaction/balance?miner=" +
+                  this.keyword
+              )
               .then((data) => {
                 if (data.data != null) {
                   this.$router.push("/address/" + this.keyword);
@@ -228,11 +254,11 @@ export default {
     handleChain(chain) {
       console.log("click on item " + chain);
       this.chainType = chain;
-      if(this.chainType == "Mainnet") {
-        this.chainApi = ""
+      if (this.chainType == "Mainnet") {
+        this.chainApi = "";
         // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/root"
-      }else if(this.chainType == "Testnet") {
-        this.chainApi = "/test"
+      } else if (this.chainType == "Testnet") {
+        this.chainApi = "/test";
         // axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "https://www.ylemscan.io" : "/test"
       }
       localStorage.setItem("chainType", this.chainType);
@@ -240,7 +266,7 @@ export default {
 
       localStorage.setItem("activeMenu", "1");
 
-      window.open('/','_self');
+      window.open("/", "_self");
     },
   },
 };
